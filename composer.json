@@ -1,5 +1,5 @@
 {
-    "name": "julio101290/boilerplatequotes",
+    "name": "julio101290/boilerplatesells",
     "description": "library to generate quotes with PDF print format to send to clients",
     "keywords": [
         "codeigniter4",
@@ -31,6 +31,7 @@
         "julio101290/boilerplatesuppliers": "^1.0.0",
         "julio101290/boilerplatetypesmovement": "^1.0.0",
         "julio101290/boilerplatecustumers": "^1.0.0",
+        "julio101290/boilerplateinventory": "^1.0.0",
         "julio101290/boilerplatestorages": "^1.0.0"
     },
     "require-dev": {
@@ -41,7 +42,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "julio101290\\boilerplatequotes\\": "src"
+            "julio101290\\boilerplatesells\\": "src"
         }
     },
     "autoload-dev": {
