@@ -1,7 +1,7 @@
 [![Latest Stable Version](https://poser.okvpn.org/julio101290/boilerplatequotes/v/stable)](https://packagist.org/packages/julio101290/boilerplatequotes) [![Total Downloads](https://poser.okvpn.org/julio101290/boilerplatequotes/downloads)](https://packagist.org/packages/julio101290/boilerplatequotes) [![Latest Unstable Version](https://poser.okvpn.org/julio101290/boilerplatequotes/v/unstable)](https://packagist.org/packages/julio101290/boilerplatequotes) [![License](https://poser.okvpn.org/julio101290/boilerplatequotes/license)](https://packagist.org/packages/julio101290/boilerplatequotes)
 
-## CodeIgniter 4 Boilerplate Quotes
-CodeIgniter4 Boilerplatequotes library to generate quotes with PDF print format to send to clients
+## CodeIgniter 4 Boilerplate Sells
+CodeIgniter4 Boilerplatequotes library to generate sells with PDF print format to send to clients
 
 
 ## Requirements
