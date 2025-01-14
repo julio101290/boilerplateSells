@@ -27,6 +27,8 @@ CodeIgniter4 Boilerplatesells library to generate sells with PDF print format to
 
 	composer require julio101290/boilerplatequotes
 
+ 	composer require julio101290/boilerplatecomprobanterd
+
  	composer require julio101290/boilerplatesells
 
 
@@ -41,6 +43,8 @@ CodeIgniter4 Boilerplatesells library to generate sells with PDF print format to
 	php spark boilerplatetypesmovement:installtypesmovement
 
 	php spark boilerplatequotes:installquotes
+
+ 	php spark boilerplatecomprobanterd:installcomprobanterd
 
 	php spark boilerplatequotes:installsells
 	
