@@ -9,7 +9,7 @@ use julio101290\boilerplatelog\Models\LogModel;
 use julio101290\boilerplatequotes\Models\QuotesModel;
 use julio101290\boilerplatesells\Models\SellsModel;
 use julio101290\boilerplatestorages\Models\StoragesModel;
-use ulio101290\boilerplatestorages\Models\SellsDetailsModel;
+use julio101290\boilerplatesells\Models\SellsDetailsModel;
 use CodeIgniter\API\ResponseTrait;
 use julio101290\boilerplatecompanies\Models\EmpresasModel;
 use julio101290\boilerplatecustumers\Models\CustumersModel;
@@ -19,9 +19,11 @@ use julio101290\boilerplatevehicles\Models\VehiculosModel;
 use julio101290\boilerplatedrivers\Models\ChoferesModel;
 use julio101290\boilerplatevehicles\Models\TipovehiculoModel;
 use julio101290\boilerplatebranchoffice\Models\BranchofficesModel;
-use julio101290\boilerplatebranchoffice\Models\ArqueoCajaModel;
+use julio101290\boilerplatecashtonnage\Models\ArqueoCajaModel;
 use julio101290\boilerplateinventory\Models\SaldosModel;
 use julio101290\boilerplatesells\Models\EnlacexmlModel;
+use julio101290\boilerplateCFDI\Models\XmlModel;
+use julio101290\boilerplateCFDI\Controllers\XmlController;
 
 class SellsController extends BaseController {
 
@@ -45,6 +47,9 @@ class SellsController extends BaseController {
     protected $arqueoCaja;
     protected $saldos;
     protected $xmlEnlace;
+    protected $enlaceXML;
+    protected $xml;
+    protected $xmlController;
 
     public function __construct() {
         $this->log = new LogModel();
@@ -65,7 +70,9 @@ class SellsController extends BaseController {
         $this->arqueoCaja = new ArqueoCajaModel();
         $this->saldos = new SaldosModel();
         $this->xmlEnlace = new EnlacexmlModel();
-
+        $this->enlaceXML = new EnlacexmlModel();
+        $this->xml = new XmlModel();
+        $this->xmlController = new XmlController();
         helper('menu');
         helper('utilerias');
     }
@@ -263,6 +270,21 @@ class SellsController extends BaseController {
         }
     }
 
+    public function generaPDFDesdeVenta($uuidVenta) {
+
+        // buscamos el id de la venta
+
+        $datosVenta = $this->sells->select("*")->where("UUID", $uuidVenta)->first();
+
+        //Buscamo el uuid del xml en xml enlazados
+
+        $enlaceXML = $this->enlaceXML->select("*")
+                        ->where("idDocumento", $datosVenta["id"])
+                        ->where("tipo", "ven")->first();
+
+        $this->xmlController->generarPDF($enlaceXML["uuidXML"]);
+    }
+
     public function newSell() {
         $auth = service('authentication');
         if (!$auth->check()) {
@@ -366,6 +388,28 @@ class SellsController extends BaseController {
         $titulos["subtitle"] = "Ventas por Empresa, Sucursal, Producto";
 
         return view('julio101290\boilerplatesells\Views\reportSellsProducts', $titulos);
+    }
+
+    public function getXMLEnlazados($uuidVenta) {
+
+        try {
+
+            $datosVenta = $this->sells->select("*")->where("UUID", $uuidVenta)->first();
+
+            if (isset($datosVenta)) {
+
+                $datosXMLEnlazados = $this->enlaceXML->mdlGetEnlacexml2($datosVenta["id"]);
+
+                return \Hermawan\DataTables\DataTable::of($datosXMLEnlazados)->toJson(true);
+            } else {
+
+                $datosXMLEnlazados = $this->enlaceXML->select("id,idDocumento,uuidXML,tipo,importe")->where("idDocumento", 0);
+                return \Hermawan\DataTables\DataTable::of($datosXMLEnlazados)->toJson(true);
+            }
+        } catch (Exception $ex) {
+
+            return $ex->getMessage();
+        }
     }
 
     /**
@@ -1244,6 +1288,90 @@ class SellsController extends BaseController {
         return $this->respondDeleted($found, 'Eliminado Correctamente');
     }
 
+    /**
+     * Funcion para enlazar venta con XML Put in Sells
+     *      */
+    public function enlazaVenta() {
+
+        $auth = service('authentication');
+
+        if (!$auth->check()) {
+            $this->session->set('redirect_url', current_url());
+
+            echo "No se ha iniciado Session";
+            return;
+        }
+
+        helper('auth');
+        $userName = user()->username;
+        $idUser = user()->id;
+
+        $request = service('request');
+        $postData = $request->getPost();
+
+        //Buscamos los datos de la venta
+        $venta = $this->sells->select("*")->where("UUID", $postData["uuidVenta"])->first();
+
+        $xml = $this->xml->select("*")->where("uuidTimbre", $postData["uuidTimbre"])->first();
+
+        $datos["idDocumento"] = $venta["id"];
+        $datos["uuidXML"] = $postData["uuidTimbre"];
+        $datos["tipo"] = "ven";
+        $datos["importe"] = $xml["total"];
+
+        if ($this->enlaceXML->save($datos) === false) {
+
+            $errores = $this->enlaceXML->errors();
+
+            $listErrors = "";
+
+            foreach ($errores as $field => $error) {
+
+                $listErrors .= $error . " ";
+            }
+
+            echo $listErrors;
+
+            return;
+        }
+
+
+        /**
+         * Registramos en bitacora
+         */
+        $datosBitacora["description"] = "Se enlazo el XML $postData[uuidTimbre] con la venta $postData[uuidVenta]" . json_encode($datos);
+        $datosBitacora["user"] = $userName;
+
+        $this->log->save($datosBitacora);
+
+        echo "Guardado Correctamente";
+    }
+
+    public function xmlSinAsignar($tipo) {
+
+
+        helper('auth');
+        $userName = user()->username;
+        $idUser = user()->id;
+        $titulos["empresas"] = $this->empresa->mdlEmpresasPorUsuario($idUser);
+
+        if (count($titulos["empresas"]) == "0") {
+
+            $empresasID[0] = "0";
+        } else {
+
+            $empresasID = array_column($titulos["empresas"], "id");
+        }
+
+        $empresasRFC = array_column($titulos["empresas"], "rfc");
+
+        if ($this->request->isAJAX()) {
+            $datos = $this->xml->mdlXMLSinAsignar($empresasID, $tipo);
+
+            return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+        }
+    }
+
     /*
 
       public function delete($id) {
@@ -1315,7 +1443,7 @@ class SellsController extends BaseController {
      */
     public function report($uuid, $isMail = 0) {
 
-        $pdf = new PDFLayout(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new PDFLayoutSells(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         $dataSells = $this->sells->where("uuid", $uuid)->first();
 

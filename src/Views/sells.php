@@ -1,7 +1,7 @@
-<?= $this->include('load/daterangapicker') ?>
-<?= $this->include('load/toggle') ?>
+<?= $this->include('julio101290\boilerplate\Views\load/daterangapicker') ?>
+<?= $this->include('julio101290\boilerplate\Views\load/toggle') ?>
 <?= $this->include('julio101290\boilerplate\Views\load\datatables') ?>
-<?= $this->include('load/extrasDatatable') ?>
+<?= $this->include('julio101290\boilerplate\Views\load/extrasDatatable') ?>
 <?= $this->include('julio101290\boilerplate\Views\load\select2') ?>
 
 
@@ -12,12 +12,12 @@
 <!-- Section content -->
 <?= $this->section('content') ?>
 
-<?= $this->include('modulesSells/modaSendMail') ?>
+<?= $this->include('julio101290\boilerplatesells\Views\modulesSells/modaSendMail') ?>
 
-<?= $this->include('modulesSells/paymentsList') ?>
-<?= $this->include('modulesSells/modalPaymentList') ?>
-<?= $this->include('modulesSells/listaFacturas') ?>
-<?= $this->include('modulesSells/xmlList') ?>
+<?= $this->include('julio101290\boilerplatesells\Views\modulesSells/paymentsList') ?>
+<?= $this->include('julio101290\boilerplatesells\modulesSells/modalPaymentList') ?>
+<?= $this->include('julio101290\boilerplatesells\modulesSells/listaFacturas') ?>
+<?= $this->include('julio101290\boilerplatesells\modulesSells/xmlList') ?>
 
 
 <!-- SELECT2 EXAMPLE -->

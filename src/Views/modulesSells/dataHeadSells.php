@@ -61,40 +61,40 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="generales" role="tabpanel" aria-labelledby="generales">
 
-                        <?= $this->include('modulesSells/generalSells') ?>
+                        <?= $this->include('julio101290\boilerplatesells\Views\modulesSells/generalSells') ?>
 
                     </div>
 
                     <div class="tab-pane fade" id="otrosDatos" role="tabpanel" aria-labelledby="otrosDatos">
 
-                        <?= $this->include('modulesSells/otrosDatos') ?>
+                        <?= $this->include('julio101290\boilerplatesells\Views\modulesSells/otrosDatos') ?>
 
                     </div>
 
                     <div class="tab-pane fade" id="datosExtraVehiculo" role="tabpanel" aria-labelledby="datosExtraVehiculo">
 
-                        <?= $this->include('modulesSells/datosExtrasVehiculos') ?>
+                        <?= $this->include('julio101290\boilerplatesells\Views\modulesSells/datosExtrasVehiculos') ?>
 
                     </div>
 
 
                     <div class="tab-pane fade" id="facturaGlobal" role="tabpanel" aria-labelledby="facturaGlobal">
 
-                        <?= $this->include('modulesSells/facturaGlobal') ?>
+                        <?= $this->include('julio101290\boilerplatesells\Views\modulesSells/facturaGlobal') ?>
 
                     </div>
 
 
                     <div class="tab-pane fade" id="facturacionMX" role="tabpanel" aria-labelledby="otrosDatos">
 
-                        <?= $this->include('modulesSells/facturacionMX') ?>
+                        <?= $this->include('julio101290\boilerplatesells\Views\modulesSells/facturacionMX') ?>
 
                     </div>
 
 
                     <div class="tab-pane fade" id="documentosRelacionados" role="tabpanel" aria-labelledby="documentosRelacionados">
 
-                        <?= $this->include('modulesSells/documentosRelacionados') ?>
+                        <?= $this->include('julio101290\boilerplatesells\Views\modulesSells/documentosRelacionados') ?>
 
                     </div>
 
