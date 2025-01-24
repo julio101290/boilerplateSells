@@ -40,7 +40,7 @@
 
 
                 <div class="form-group">
-                    <label for="idEmpresa">Empresa </label>
+                    <label for="idEmpresa"><?= lang('sells.companie') ?> </label>
                     <select id='idEmpresa' name='idEmpresa' class="idEmpresa" style='width: 80%;'>
 
                         <?php
@@ -49,7 +49,7 @@
                             echo "   <option value='$idEmpresa'>$idEmpresa - $nombreEmpresa</option>";
                         } else {
 
-                            echo "  <option value='0'>Todas las empresas</option>";
+                            echo "  <option value='0'>" . lang('sells.allCompanies') . "</option>";
 
                             foreach ($empresas as $key => $value) {
 
@@ -69,11 +69,11 @@
 
 
                 <div class="form-group">
-                    <label for="idSucursal">Sucursal </label>
+                    <label for="idSucursal"><?= lang('sells.branchoffice') ?> </label>
                     <select id='idSucursal' name='idSucursal' class="idSucursal" style='width: 100%;'>
 
                         <?php
-                        echo "  <option value='0'>Todas las Sucursales</option>";
+                        echo "  <option value='0'>" . lang('sells.AllBranchoffice') . "</option>";
                         if (isset($idSucursal)) {
 
                             echo "   <option value='$idSucursal'>$idSucursal - $nombreSucursal</option>";
@@ -93,11 +93,11 @@
 
 
                 <div class="form-group">
-                    <label for="productos">Cliente </label>
+                    <label for="productos"><?= lang('sells.branchoffice') ?> </label>
                     <select id='clientes' name='clientes' class="clientes" style='width: 100%;'>
 
                         <?php
-                        echo "  <option value='0'>Todas los clientes</option>";
+                        echo "  <option value='0'>" . lang('sells.allCustumer') . "</option>";
                         ?>
 
                     </select>
@@ -109,7 +109,7 @@
 
 
 
-                <input type="checkbox" id="chkTodasLasVentas" name="chkTodasLasVentas" class="chkTodasLasVentas" data-width="250" data-height="40" checked data-toggle="toggle" data-on="Todas las ventas" data-off="Pendientes de Pago" data-onstyle="success" data-offstyle="danger">
+                <input type="checkbox" id="chkTodasLasVentas" name="chkTodasLasVentas" class="chkTodasLasVentas" data-width="250" data-height="40" checked data-toggle="toggle" data-on="<?= lang('sells.allSells') ?>" data-off="<?= lang('sells.allSells') ?>" data-onstyle="success" data-offstyle="danger">
 
             </div>
 
@@ -121,7 +121,7 @@
 
                 <a href="<?= base_url("admin/newSells") ?>" class="btn btn-primary btnAddCustumers" data-target="#modalAddCustumers"><i class="fa fa-plus"></i>
 
-                    Nueva Venta
+                    <?= lang('sells.add') ?>
 
                 </a>
 
@@ -141,48 +141,48 @@
 
                             <tr>
 
-                                <th>#</th>
+                                <th><?= lang('sells.fields.row') ?></th>
                                 <th>
-                                    Folio
+                                    <?= lang('sells.fields.folio') ?>
                                 </th>
                                 <th>
-                                    Cliente
+                                    <?= lang('sells.fields.custumer') ?>
                                 </th>
                                 <th>
-                                    Fecha
-                                </th>
-
-                                <th>
-                                    Fecha Vencimiento
-                                </th>
-                                <th>
-                                    SubTotal
-                                </th>
-                                <th>
-                                    Impuesto
-                                </th>
-                                <th>
-                                    Total
+                                    <?= lang('sells.fields.date') ?>
                                 </th>
 
                                 <th>
-                                    Pendiente
+                                    <?= lang('sells.fields.expirationDate') ?>
                                 </th>
                                 <th>
-                                    Tiempo Entrega
+                                    <?= lang('sells.fields.subTotal') ?>
                                 </th>
                                 <th>
-                                    Creado
+                                    <?= lang('sells.fields.tax') ?>
                                 </th>
                                 <th>
-                                    Modificado
-                                </th>
-                                <th>
-                                    Eliminado
+                                    <?= lang('sells.fields.total') ?>
                                 </th>
 
                                 <th>
-                                    Acciones
+                                    <?= lang('sells.fields.pending') ?>
+                                </th>
+                                <th>
+                                    <?= lang('sells.fields.timeDelevery') ?>
+                                </th>
+                                <th>
+                                    <?= lang('sells.fields.created_at') ?>
+                                </th>
+                                <th>
+                                    <?= lang('sells.fields.updated_at') ?>
+                                </th>
+                                <th>
+                                    <?= lang('sells.fields.deleted_at') ?>
+                                </th>
+
+                                <th>
+                                    <?= lang('sells.fields.actions') ?>
                                 </th>
 
                             </tr>
@@ -213,7 +213,7 @@
         buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'pageLength'],
         lengthMenu: [
             [150, 200, 500, -1],
-            ['150 renglones', '200 renglones', '500 renglones', 'Todo']
+            ['150  <?= lang('sells.fields.rows') ?>', '200  <?= lang('sells.fields.rows') ?>', '500  <?= lang('sells.fields.rows') ?>', ' <?= lang('sells.all') ?>']
         ],
         responsive: true,
         autoWidth: false,
@@ -791,17 +791,14 @@
 
 
     });
-    
-    $( document ).ready(function() {
-    <?php
-    
-        if(isset($cliente)){
-            
-            echo  "tableQuotes.ajax.url('".base_url('admin/sells')."/$desdeFecha/$hastaFecha/$todas/$empresa/$sucursal/$cliente').load()";
-            
-        }
-    
-    ?>
-        })
+
+    $(document).ready(function () {
+<?php
+if (isset($cliente)) {
+
+    echo "tableQuotes.ajax.url('" . base_url('admin/sells') . "/$desdeFecha/$hastaFecha/$todas/$empresa/$sucursal/$cliente').load()";
+}
+?>
+    })
 </script>
 <?= $this->endSection() ?>

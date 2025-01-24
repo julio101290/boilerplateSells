@@ -7,13 +7,13 @@
 
     <div class="col-lg-2  col-xs-12 col-md-2">
         <div class="form-group">
-            <label for="datetime">Fecha</label>
+            <label for="datetime"><?= lang('newSell.date') ?></label>
             <input type="date" id="date" name="date" value="<?= $fecha ?>">
         </div>
     </div>
     <div class="col-4" col-lg-12>
         <div class="form-group">
-            <label for="idEmpresaSells">Empresa </label>
+            <label for="idEmpresaSells"><?= lang('newSell.companie') ?> </label>
             <select id='idEmpresaSells' name='idEmpresaSells' class="idEmpresaSells" style='width: 80%;'>
 
                 <?php
@@ -22,7 +22,7 @@
                     echo "   <option value='$idEmpresa'>$idEmpresa - $nombreEmpresa</option>";
                 } else {
 
-                    echo "  <option value=''>Seleccione Empresa</option>";
+                    echo "  <option value=''>".lang('newSell.selectCompanie')."</option>";
 
                     foreach ($empresas as $key => $value) {
 
@@ -39,7 +39,7 @@
 
     <div class="col-lg-2  col-xs-12 col-md-2">
         <div class="form-group">
-            <label for="idSucursal">Sucursal </label>
+            <label for="idSucursal"><?= lang('newSell.branchoffice') ?> </label>
             <select id='idSucursal' name='idSucursal' class="idSucursal" style='width: 80%;'>
 
                 <?php
@@ -58,7 +58,7 @@
          text-align: right;
          ">
         <div class="form-group ">
-            <label for="codeSell">Folio No.</label>
+            <label for="codeSell"><?= lang('newSell.folio') ?></label>
 
 
             <input type="text" id="codeSell" name="codeSell" disabled value="<?= $folio ?>">
@@ -73,7 +73,7 @@
 
     <div class="col-6">
         <div class="form-group">
-            <label for="tipoComprobanteRD">Tipo Comprobante </label>
+            <label for="tipoComprobanteRD"><?= lang('newSell.typeVoucher') ?> </label>
             <select id='tipoComprobanteRD' name='tipoComprobanteRD' class="tipoComprobanteRD" style='width: 100%;'>
 
                 <?php
@@ -82,7 +82,7 @@
                     echo "   <option value='$tipoComprobanteRDID'>$tipoComprobanteRDPrefijo - $tipoComprobanteRDNombre</option>";
                 } else {
 
-                    echo "  <option value=''>Seleccione Cliente</option>";
+                    echo "  <option value=''>".lang('newSell.selectTypeVoucher')."</option>";
                 }
                 ?>
 
@@ -93,7 +93,7 @@
 
     <div class="col-6 pull-right" style="text-align: right;">
         <div class="form-group ">
-            <label for="folioComprobanteRD">Comprobante No.</label>
+            <label for="folioComprobanteRD"><?= lang('newSell.typeVoucher') ?></label>
 
 
             <input type="text" id="folioComprobanteRD" name="folioComprobanteRD" disabled value="<?= $folioComprobanteRD ?>">
@@ -107,7 +107,7 @@
 
     <div class="col-lg-2  col-xs-12 col-md-2">
         <div class="form-group">
-            <label for="custumerSell">Clientes </label>
+            <label for="custumerSell"><?= lang('newSell.custumer') ?> </label>
             <select id='custumerSell' name='custumerSell' class="custumerSell" style='width: 100%;'>
 
                 <?php
@@ -116,7 +116,7 @@
                     echo "   <option value='$idCustumer'>$idCustumer - $nameCustumer</option>";
                 } else {
 
-                    echo "  <option value=''>Seleccione Cliente</option>";
+                    echo "  <option value=''>".lang('newSell.selectCustumer') ."</option>";
                 }
                 ?>
 
@@ -126,7 +126,7 @@
 
     <div class="col-lg-1  col-xs-12 col-md-1">
         <div class="form-group">
-            <label for="datetime">Fecha Vencimiento.</label>
+            <label for="datetime"><?= lang('newSell.expirationDate') ?></label>
             <input type="date" id="dateVen" name="dateVen" value="<?= $fecha ?>">
 
             <input type="hidden" id="titulo" name="titulo" value="<?= $title ?>">
@@ -166,14 +166,14 @@
             <?php if ($permisoAgregarArticulo) : ?>
                 <button class="btn btn-primary btnAddProducts" data-toggle="modal" data-target="#modalAddProducts"><i class="fa fa-plus"></i>
 
-                    Nuevo Articulo
+                    <?= lang('newSell.addArticle') ?>
 
                 </button>
             <?php endif; ?>
 
             <button class="btn btn-primary btnAddCustumers" data-toggle="modal" data-target="#modalAddCustumers"><i class="fa fa-plus"></i>
 
-                Cliente Nuevo
+                <?= lang('newSell.newCustumer') ?>
 
             </button>
         </div>

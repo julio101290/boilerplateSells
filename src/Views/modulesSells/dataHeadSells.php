@@ -5,7 +5,7 @@
 
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title">Encabezado</h3>
+                <h3 class="card-title"><?= lang('newSell.header') ?></h3>
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -22,35 +22,35 @@
 
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="generales-tab" data-toggle="tab" data-target="#generales" type="button" role="tab" aria-controls="generales" aria-selected="true">Generales</button>
+                        <button class="nav-link active" id="generales-tab" data-toggle="tab" data-target="#generales" type="button" role="tab" aria-controls="generales" aria-selected="true"><?= lang('newSell.generals') ?></button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#otrosDatos" type="button" role="tab" aria-controls="otrosDatos" aria-selected="false">Otros
-                            Datos</button>
+                        <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#otrosDatos" type="button" role="tab" aria-controls="otrosDatos" aria-selected="false"><?= lang('newSell.others') ?>
+                            </button>
                     </li>
 
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#datosExtraVehiculo" type="button" role="tab" aria-controls="datosExtraVehiculo" aria-selected="false">
-                            Datos Extra Vehiculo
+                           <?= lang('newSell.othersDataVehicle') ?>
                         </button>
                     </li>
 
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="facturaGlobal-tab" data-toggle="tab" data-target="#facturaGlobal" type="button" role="tab" aria-controls="facturaGlobal" aria-selected="false">
-                            Factura Global
+                            <?= lang('newSell.globalInvoice') ?>
                         </button>
                     </li>
 
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#facturacionMX" type="button" role="tab" aria-controls="facturacionMX" aria-selected="false">
-                            Facturación MX
+                           <?= lang('newSell.invoiceMX') ?>
                         </button>
                     </li>
 
 
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="documentosRelacionados-tab" data-toggle="tab" data-target="#documentosRelacionados" type="button" role="tab" aria-controls="documentosRelacionados" aria-selected="false">
-                            Documentos Relacionados
+                            <?= lang('newSell.relationDocuments') ?>
                         </button>
                     </li>
 
@@ -112,7 +112,7 @@
         <div class="col-12">
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title">Detalle de la venta</h3>
+                    <h3 class="card-title"><?= lang('newSell.sellDetail') ?></h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -139,12 +139,12 @@
                                         <!--=====================================
                                     ENCABEZADO
                                     ======================================-->
-                                        <div class="col-1"> # </div>
-                                        <div class="d-none d-lg-table-cell col-1 "> Codigo </div>
-                                        <div class="col-7"> Descripción </div>
-                                        <div class="col-1">Cantidad </div>
-                                        <div class="col-1">Precio </div>
-                                        <div class="col-1">Total </div>
+                                        <div class="col-1"> <?= lang('newSell.fields.row') ?> </div>
+                                        <div class="d-none d-lg-table-cell col-1 "> <?= lang('newSell.fields.code') ?> </div>
+                                        <div class="col-7"> <?= lang('newSell.fields.description') ?> </div>
+                                        <div class="col-1"><?= lang('newSell.fields.amount') ?> </div>
+                                        <div class="col-1"><?= lang('newSell.fields.price') ?> </div>
+                                        <div class="col-1"><?= lang('newSell.fields.total') ?> </div>
 
 
                                     </div>
@@ -285,7 +285,7 @@
                                     <div class="col-3" style="
                                          vertical-align: middle;
                                          ">
-                                        <label style="vertical-align: sub;margin-bottom: 0px;">Sub Total:</label>
+                                        <label style="vertical-align: sub;margin-bottom: 0px;"><?= lang('newSell.subTotal') ?>:</label>
                                     </div>
 
                                     <div class="col-2">
@@ -308,7 +308,7 @@
                                          ">
                                         <label style="
                                                vertical-align: sub;
-                                               ">Impuesto:</label>
+                                               "><?= lang('newSell.tax') ?>:</label>
                                     </div>
 
                                     <div class="col-2">
@@ -331,7 +331,7 @@
                                          ">
                                         <label style="
                                                vertical-align: sub;
-                                               ">Retencion IVA:</label>
+                                               "><?= lang('newSell.VATWithholding') ?>:</label>
                                     </div>
 
                                     <div class="col-2">
@@ -353,7 +353,7 @@
                                          ">
                                         <label style="
                                                vertical-align: sub;
-                                               ">Tasa Exenta:</label>
+                                               "><?= lang('newSell.exemptRate') ?>:</label>
                                     </div>
 
                                     <div class="col-2">
@@ -375,7 +375,7 @@
                                          ">
                                         <label style="
                                                vertical-align: sub;
-                                               ">Retencion ISR:</label>
+                                               "><?= lang('newSell.ISRWithholding') ?>:</label>
                                     </div>
 
 
@@ -398,7 +398,7 @@
                                          ">
                                         <label style="
                                                vertical-align: sub;
-                                               ">Total:</label>
+                                               "><?= lang('newSell.total') ?>:</label>
                                     </div>
 
                                     <div class="col-2">
@@ -412,14 +412,14 @@
 
 
                                 <button type="button" class="btn btn-primary pull-right btnSaveSells" data-toggle="modal">
-                                    <i class="fa far fa-save"> </i>Guardar</button>
+                                    <i class="fa far fa-save"> </i><?= lang('newSell.save') ?></button>
 
                                 <button type="button" class="btn bg-maroon btnPrint" data-toggle="modal" required="" data-placement="top" title="Imprimir">
-                                    <i class="fa fa-print"> </i> Guardar, Imprimir y cerrar
+                                    <i class="fa fa-print"> </i> <?= lang('newSell.savePrintClose') ?>
                                 </button>
 
                                 <button type="button" class="btn bg-maroon btnTimbrar" data-toggle="modal" required="" data-placement="top" title="Timbrar">
-                                    <i class="fas fa-qrcode"> </i> Timbrar
+                                    <i class="fas fa-qrcode"> </i> <?= lang('newSell.stamp') ?>
                                 </button>
 
                             </div>
@@ -565,7 +565,7 @@
 
                 Toast.fire({
                     icon: 'error',
-                    title: "Tiene que seleccionar la empresa"
+                    title: "<?= lang('newSell.selectCompanie') ?>"
                 });
                 return;
             }
@@ -592,7 +592,7 @@
 
                         Toast.fire({
                             icon: 'success',
-                            title: "Guardado Correctamente"
+                            title: "<?= lang('newSell.driverSavedSucess') ?>"
                         });
 
                         tableChoferes.ajax.reload();
@@ -1042,7 +1042,7 @@
 
                 Toast.fire({
                     icon: 'error',
-                    title: "Tiene que seleccionar la empresa"
+                    title: "<?= lang('newSell.driverSavedSucess') ?>"
                 });
                 return;
             }
@@ -1051,7 +1051,7 @@
 
                 Toast.fire({
                     icon: 'error',
-                    title: "Tiene que seleccionar el tipo de vehiculo"
+                    title: "<?= lang('newSell.vehiclesNeedSelected') ?>"
                 });
                 return;
             }
@@ -1081,7 +1081,7 @@
 
                         Toast.fire({
                             icon: 'success',
-                            title: "Guardado Correctamente"
+                            title: "<?= lang('newSell.vehiclesSavedSucess') ?>"
                         });
 
                         tableVehiculos.ajax.reload();
@@ -1213,7 +1213,7 @@
 
                         Toast.fire({
                             icon: 'success',
-                            title: "Timbrada Correctamente"
+                            title: "<?= lang('newSell.stampSuccess') ?>"
                         });
 
                         $(".btnTimbrar").removeAttr("disabled");
@@ -1404,7 +1404,7 @@
 
                 Toast.fire({
                     icon: 'error',
-                    title: "Tiene que seleccionar la empresa"
+                    title: "<?= lang('newSell.selectCompanie') ?>"
                 });
 
                 return false;
@@ -1415,7 +1415,7 @@
 
                 Toast.fire({
                     icon: 'error',
-                    title: "Tiene que seleccionar un cliente"
+                    title: "<?= lang('newSell.selectCustumer') ?>"
                 });
 
                 return false;
@@ -1427,7 +1427,7 @@
 
                 Toast.fire({
                     icon: 'error',
-                    title: "Tiene que seleccionar una sucursal"
+                    title: "<?= lang('newSell.selectBranchoffice') ?>"
                 });
 
                 return false;
@@ -1439,7 +1439,7 @@
 
                 Toast.fire({
                     icon: 'error',
-                    title: "Tiene que agregar al menos un producto"
+                    title: "<?= lang('newSell.selectBranchoffice') ?>"
                 });
 
                 return false;

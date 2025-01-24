@@ -105,4 +105,9 @@ $routes->group('admin', function ($routes) {
             , 'SellsController::generaPDFDesdeVenta/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
     );
+
+    $routes->get('xml/descargaAcuseCancelacion/(:any)'
+            , 'SellsController::descargaAcuseCancelacion/$1'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+    );
 });

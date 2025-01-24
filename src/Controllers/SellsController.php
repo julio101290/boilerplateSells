@@ -384,8 +384,8 @@ class SellsController extends BaseController {
 
 
 
-        $titulos["title"] = "Reporte de Ventas"; //lang('registerNew.title');
-        $titulos["subtitle"] = "Ventas por Empresa, Sucursal, Producto";
+        $titulos["title"] = lang('newSell.sellsReportsTitle');
+        $titulos["subtitle"] = lang('newSell.sellsReportsSubTitle');
 
         return view('julio101290\boilerplatesells\Views\reportSellsProducts', $titulos);
     }
@@ -1289,6 +1289,17 @@ class SellsController extends BaseController {
     }
 
     /**
+     * Descarga XML
+     */
+    public function descargaAcuseCancelacion($uuid) {
+
+        $datosXML = $this->xml->select("*")->where("uuidTimbre", $uuid)->find();
+
+        $this->response->setHeader("Content-Type", "text/xml");
+        echo $datosXML[0]["acuseCancelacion"];
+    }
+
+    /**
      * Funcion para enlazar venta con XML Put in Sells
      *      */
     public function enlazaVenta() {
@@ -1456,7 +1467,7 @@ class SellsController extends BaseController {
         $datosEmpresa = $this->empresa->select("*")->where("id", $dataSells["idEmpresa"])->first();
         $datosEmpresaObj = $this->empresa->select("*")->where("id", $dataSells["idEmpresa"])->asObject()->first();
 
-        $pdf->nombreDocumento = "Nota De Venta";
+        $pdf->nombreDocumento = lang('newSell.sellNote');
         $pdf->direccion = $datosEmpresaObj->direccion;
 
         if ($datosEmpresaObj->logo == NULL || $datosEmpresaObj->logo == "") {
@@ -1508,16 +1519,34 @@ class SellsController extends BaseController {
 
         $pdf->SetY(45);
         //ETIQUETAS
-        $cliente = "Cliente: ";
-        $folioRegistro = " Folio: ";
-        $fecha = " Fecha:";
+        $cliente = lang('newSell.custumer') . " ";
+        $folioRegistro = lang('newSell.folio') . " ";
+        $fecha = lang('newSell.date') . "";
+        $fechaVencimiento = lang('newSell.expirationDate') . "";
+
+        $atencionA = lang('newSell.quoteTo') . ":";
+        $observaciones = lang('newSell.sellsObservations') . ":";
+        $vendedor = lang('newSell.seller') . "";
+        $vigencia = lang('newSell.validity') . "";
+        $codigo = lang('newSell.fields.code') . "";
+        $descripcion = lang('newSell.fields.description') . "";
+        $cantidad = lang('newSell.fields.amount') . "";
+        $precio = lang('newSell.fields.price') . "";
+        $lblSubtotal = lang('newSell.subTotal') . "";
+        $lblTotal = lang('newSell.fields.total') . "";
+
+        $impuestos = lang('newSell.quoteTo') . "";
+        $lblIvaRetenido = lang('newSell.VATWithholding') . "";
+        $lblISRRetenido = lang('newSell.ISRWithholding') . "";
+        $atencionA = lang('newSell.quoteTo') . "";
+
+        $lblMsgThanks = lang('newSell.thanks');
+        $lblMsgSellNote = lang('newSell.msgSellNote');
+        $lblUUIDocument = lang('newSell.documendUUID');
+        
 
         $pdf->SetY(45);
         //ETIQUETAS
-        $cliente = "Cliente: ";
-        $folioRegistro = " Folio: ";
-        $fecha = " Fecha:";
-
         // set font
         //$pdf->SetFont('times', '', 12);
 
@@ -1548,9 +1577,9 @@ class SellsController extends BaseController {
         <table style="font-size:10px; padding:0px 10px;">
     
              <tr>
-               <td style="width: 50%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">ATENCION A
+               <td style="width: 50%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">$atencionA
                </td>
-               <td style="width: 50%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">OBSERVACIONES
+               <td style="width: 50%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">$observaciones
                </td>
             </tr>
             <tr>
@@ -1558,7 +1587,7 @@ class SellsController extends BaseController {
                 <td >
     
     
-                Cliente: $custumer[firstname] $custumer[lastname] 
+                $cliente: $custumer[firstname] $custumer[lastname] 
     
                     <br>
                     Telefono: 000
@@ -1578,16 +1607,16 @@ class SellsController extends BaseController {
     
             <tr>
     
-                <td style="width: 25%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">VENDEDOR
+                <td style="width: 25%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">$vendedor
                 </td>
     
-                <td style="width: 24%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">FECHA
+                <td style="width: 24%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">$fecha
                 </td>
-                <td style="width: 30%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">FECHA DE VENCIMIENTO
+                <td style="width: 30%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">$fechaVencimiento
                 </td>
     
     
-                <td style="width: 21%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">VIGENCIA
+                <td style="width: 21%; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white;">$vigencia
                 </td>
     
             </tr>
@@ -1619,13 +1648,13 @@ class SellsController extends BaseController {
     
             <tr>
     
-            <td style="width: 100px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">Código</td>
-            <td style="width: 200px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">Descripción</td>
-                     <td style="width: 60px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">Cant</td>
+            <td style="width: 100px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center"> $codigo</td>
+            <td style="width: 200px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center"> $descripcion</td>
+                     <td style="width: 60px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">$cantidad</td>
     
-            <td style="width: 80px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">Precio</td>
-            <td style="width: 100px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">SubTotal</td>
-            <td style="width: 100px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">Total</td>
+            <td style="width: 80px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">$precio</td>
+            <td style="width: 100px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">$lblSubtotal</td>
+            <td style="width: 100px; background-color:#2c3e50; padding: 4px 4px 4px; font-weight:bold;  color:white; text-align:center">$lblTotal</td>
     
             </tr>
     
@@ -1714,7 +1743,7 @@ class SellsController extends BaseController {
                     <td style="border-right: 0px solid #666; color:#333; background-color:white; width:340px; text-align:right"></td>
     
                     <td style="border: 0px solid #666; background-color:white; width:100px; text-align:right">
-                    IVA Retenido:
+                   $lblIvaRetenido:
                     </td>
     
                     <td style="border: 0px solid #666; color:#333; background-color:white; width:100px; text-align:right">
@@ -1738,7 +1767,7 @@ class SellsController extends BaseController {
                     <td style="border-right: 0px solid #666; color:#333; background-color:white; width:340px; text-align:right"></td>
     
                     <td style="border: 0px solid #666; background-color:white; width:100px; text-align:right">
-                    ISR Retenido:
+                    $lblISRRetenido:
                     </td>
     
                     <td style="border: 0px solid #666; color:#333; background-color:white; width:100px; text-align:right">
@@ -1776,7 +1805,7 @@ class SellsController extends BaseController {
               <td style="border-right: 0px solid #666; color:#333; background-color:white; width:340px; text-align:right"></td>
   
               <td style="border: 0px solid #666;  background-color:white; width:100px; text-align:right">
-              Subtotal:
+              $lblSubtotal:
               </td>
   
               <td style="border: 0px solid #666; color:#333; background-color:white; width:100px; text-align:right">
@@ -1809,7 +1838,7 @@ class SellsController extends BaseController {
               <td style="border-right: 0px solid #666; color:#333; background-color:white; width:340px; text-align:right"></td>
   
               <td style="border: 0px solid #666; background-color:white; width:100px; text-align:right">
-                  Total:
+                  $lblTotal:
               </td>
   
               <td style="border: 0px solid #666; color:#333; background-color:white; width:100px; text-align:right">
@@ -1821,13 +1850,13 @@ class SellsController extends BaseController {
   
       </table>
       <br>
-      <div style="font-size:11pt;text-align:center;font-weight:bold">Gracias por su compra!</div>
+      <div style="font-size:11pt;text-align:center;font-weight:bold">$lblMsgThanks!</div>
   <br><br>
                   
-          <div style="font-size:8.5pt;text-align:left;font-weight:ligth">UUID DOCUMENTO: $dataSells[UUID]</div>
+          <div style="font-size:8.5pt;text-align:left;font-weight:ligth">$lblUUIDocument: $dataSells[UUID]</div>
           
      
-      <div style="font-size:8.5pt;text-align:left;font-weight:ligth">ES RESPONSABILIDAD DEL CLIENTE REVISAR A DETALLE ESTA COTIZACION PARA SU POSTERIOR SURTIDO, UNA VEZ CONFIRMADA, NO HAY CAMBIOS NI DEVOLUCIONES.</div>
+      <div style="font-size:8.5pt;text-align:left;font-weight:ligth">$lblMsgSellNote</div>
   
       
   

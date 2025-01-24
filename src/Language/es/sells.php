@@ -1,66 +1,51 @@
- <?php
-$xml["logDescription"] = "El registro en ventas fue guardado con los siguientes datos:";
-$xml["logUpdate"] = "El registro en ventas fue actualizado con los siguientes datos:";
-$xml["logDeleted"] = "El registro en ventas fue eliminado con los siguientes datos:";
-$xml["msg_delete"] = "El Registro en ventas fue eliminado correctamente:";
-$xml["add"] = "Agregar venta";
-$xml["edit"] = "Editar venta";
-$xml["createEdit"] = "Crear / Editar";
-$xml["title"] = "Admon. Ventas";
-$xml["subtitle"] = "Lista de Ventas";
+<?php
 
-$xml["companie"] = "Empresa";
-$xml["tipoComprobante"] = "Tipo Comprobante";
-$xml["emitidoRecibido"] = "Emitido / Recibido";
-$xml["RFCEmisor"] = "RFC Emisor";
-$xml["RFCReceptor"] = "RFC Receptor";
-$xml["usoCFDI"] = "Uso CFDI";
-$xml["metodoPago"] = "Método de Pago";
-$xml["formaPago"] = "Forma de Pago";
-$xml["status"] = "Status";
+$sells["logDescription"] = "El registro en ventas fue guardado con los siguientes datos:";
+$sells["logUpdate"] = "El registro en ventas fue actualizado con los siguientes datos:";
+$sells["logDeleted"] = "El registro en ventas fue eliminado con los siguientes datos:";
+$sells["msg_delete"] = "El Registro en ventas fue eliminado correctamente:";
+$sells["add"] = "Nueva venta";
+$sells["edit"] = "Editar venta";
+$sells["createEdit"] = "Crear / Editar";
+$sells["title"] = "Admon. Ventas";
+$sells["subtitle"] = "Lista de Ventas";
 
-$xml["statusVigente"] = "Vigente";
-$xml["statusCancelado"] = "Cancelado";
-$xml["statusAlls"] = "Todos";
+$sells["companie"] = "Empresa";
+$sells["allCompanies"] = "Todas las empresas";
+$sells["branchoffice"] = "Sucursal";
+$sells["AllBranchoffice"] = "Todas las Sucursales ";
+$sells["custumer"] = "Cliente ";
+$sells["allCustumer"] = "Todos los Clientes ";
 
-$xml["selectTipoComprobante"] = "Seleccione tipo comprobante";
+$sells["allSells"] = "Todas las ventas";
+$sells["pendingPayment"] = "RFC Emisor";
 
-$xml["selectRFCEmisor"] = "Seleccione RFC Emisor";
-$xml["selectRFCReceptor"] = "Seleccione RFC Receptor";
-$xml["selectUsoCFDI"] = "Seleccione Uso del CFDI";
-$xml["selectMetodoPago"] = "Seleccione el método de pago";
-$xml["selectFormaPago"] = "Seleccione el forma de pago";
+$sells["fields"]["row"] = "#";
+$sells["fields"]["folio"] = "Folio";
+$sells["fields"]["custumer"] = "Cliente";
+$sells["fields"]["date"] = "Fecha";
+$sells["fields"]["expirationDate"] = "Fecha Vencimiento";
 
+$sells["fields"]["subTotal"] = "Sub Total";
+$sells["fields"]["tax"] = "Impuesto";
+$sells["fields"]["total"] = "Total";
+$sells["fields"]["pending"] = " Pendiente";
 
-$xml["emitido"] = "Emitido";
-$xml["recibido"] = "Recibido";
-$xml["emitidoRecibidoAlls"] = "Todos";
+$sells["fields"]["timeDelevery"] = "Tiempo Entrega";
 
-$xml["fields"]["select"] = "Seleccionar";
-$xml["fields"]["uuidTimbre"] = "UUID Timbre";
-$xml["fields"]["archivoXML"] = "Archivo XML";
-$xml["fields"]["serie"] = "Serie";
-$xml["fields"]["folio"] = "Folio";
+$sells["fields"]["created_at"] = "Creado";
+$sells["fields"]["deleted_at"] = "Eliminado";
+$sells["fields"]["updated_at"] = "Actualizado";
 
-$xml["fields"]["RFCEmisor"] = "RFC Emisor";
-$xml["fields"]["RFCReceptor"] = "RFC Receptor";
-$xml["fields"]["nombreReceptor"] = "Nombre Emisor";
-$xml["fields"]["nombreReceptor"] = " Nombre Receptor";
+$sells["fields"]["rows"] = "renglones";
 
-$xml["fields"]["tipoComprobante"] = "Tipo Comprobante";
-$xml["fields"]["fecha"] = "Fecha";
-$xml["fields"]["fechaTimbrado"] = "Fecha Timbrado";
-$xml["fields"]["total"] = "Total";
-$xml["fields"]["created_at"] = "Creado";
-$xml["fields"]["deleted_at"] = "Eliminado";
-$xml["fields"]["updated_at"] = "Actualizado";
-$xml["fields"]["uuidPaquete"] = "UUID Paquete";
+$sells["all"] = "Todo";
 
-$xml["fields"]["actions"] = "Acciones";       
-$xml["msg"]["msg_insert"] = "Registro agregado correctamente.";
-$xml["msg"]["msg_update"] = "Registro modificado correctamente.";
-$xml["msg"]["msg_delete"] = "Registro eliminado correctamente.";
-$xml["msg"]["msg_get"] = "Registro obtenido correctamente.";
-$xml["msg"]["msg_get_fail"] = "Registro no encontrado o eliminado.";
-return $xml;
-        
+$sells["fields"]["actions"] = "Acciones";
+$sells["msg"]["msg_insert"] = "Venta agregada correctamente.";
+$sells["msg"]["msg_update"] = "Venta modificada correctamente.";
+$sells["msg"]["msg_delete"] = "Venta eliminada correctamente.";
+$sells["msg"]["msg_get"] = "Venta obtenido correctamente.";
+$sells["msg"]["msg_get_fail"] = "Venta no encontrada o eliminada.";
+
+return $sells;

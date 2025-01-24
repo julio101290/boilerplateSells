@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Total a Pagar</h5>
+                <h5 class="modal-title"><?= lang('newSell.totalForPayment') ?></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -12,7 +12,7 @@
                 <form id="form-paciente" class="form-horizontal">
 
                     <div class="form-group row">
-                        <label for="inputName" class="col-sm-2 col-form-label">Fecha Pago</label>
+                        <label for="inputName" class="col-sm-2 col-form-label"><?= lang('newSell.datePayment') ?></label>
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -24,18 +24,18 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="inputName" class="col-sm-2 col-form-label">Método de Pago</label>
+                        <label for="inputName" class="col-sm-2 col-form-label"><?= lang('newSell.methodPayment') ?></label>
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
                                 </div>
                                 <select  name="metodoPago" id="metodoPago" class="form-control <?= session('error.uuidMail') ? 'is-invalid' : '' ?>" value="" placeholder="UUID Registro" autocomplete="off">
-                                    <option value="1"> Efectivo</option>
-                                    <option value="2"> Tarjeta</option>
-                                    <option value="3"> Transferencia</option>
+                                    <option value="1"> <?= lang('newSell.methodPaymentCash') ?></option>
+                                    <option value="2"> <?= lang('newSell.creditCard') ?></option>
+                                    <option value="3">  <?= lang('newSell.transfer') ?></option>
 
-                                    <select>
+                                    </select>
 
                                         </div>
                                         </div>
@@ -43,7 +43,7 @@
 
 
                                         <div class="form-group row">
-                                            <label for="inputName" class="col-sm-2 col-form-label">Pago</label>
+                                            <label for="inputName" class="col-sm-2 col-form-label"><?= lang('newSell.payment') ?></label>
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -55,7 +55,7 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="tireType" class="col-sm-2 col-form-label">Cambio</label>
+                                            <label for="tireType" class="col-sm-2 col-form-label"><?= lang('newSell.change') ?></label>
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -70,7 +70,7 @@
 
 
                                         <div class="form-group row">
-                                            <label for="tireType" class="col-sm-2 col-form-label">Observaciones</label>
+                                            <label for="tireType" class="col-sm-2 col-form-label"><?= lang('newSell.paymentObservations') ?></label>
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -88,8 +88,8 @@
                                         </form>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><?= lang('boilerplate.global.close') ?></button>
-                                            <button type="button" class="btn btn-primary btn-sm btnSavePayment" id="btnSavePayment">Guardar</button>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><?= lang('newSell.closePayment') ?>/button>
+                                            <button type="button" class="btn btn-primary btn-sm btnSavePayment" id="btnSavePayment"><?= lang('newSell.') ?></button>
                                         </div>
                                         </div>
                                         </div>
