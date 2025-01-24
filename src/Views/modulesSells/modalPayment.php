@@ -88,8 +88,8 @@
                                         </form>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><?= lang('newSell.closePayment') ?>/button>
-                                            <button type="button" class="btn btn-primary btn-sm btnSavePayment" id="btnSavePayment"><?= lang('newSell.') ?></button>
+                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><?= lang('newSell.closePayment') ?></button>
+                                            <button type="button" class="btn btn-primary btn-sm btnSavePayment" id="btnSavePayment"><?= lang('newSell.savePayment') ?></button>
                                         </div>
                                         </div>
                                         </div>
