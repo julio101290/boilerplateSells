@@ -52,8 +52,11 @@ CodeIgniter4 Boilerplatesells library to generate sells with PDF print format to
 	php spark boilerplatequotes:installsells
 	
 
-# Make the Menu, Example
+## Make the Menu, Example
 ![image](https://github.com/user-attachments/assets/f949cad0-1797-488b-a80f-4181e099aed5)
+
+## Make Menu for Sells Report
+![image](https://github.com/user-attachments/assets/3a1e7049-5dde-4430-bbd4-5554d1de00d6)
 
 
 # Ready
@@ -71,6 +74,9 @@ CodeIgniter4 Boilerplatesells library to generate sells with PDF print format to
 ![image](https://github.com/user-attachments/assets/acf52c06-bffd-42ef-b032-ca060085d884)
 
 ![image](https://github.com/user-attachments/assets/f2d47409-8c84-42bc-b9f2-4f89c269bd45)
+
+![image](https://github.com/user-attachments/assets/d67feef3-cb05-4364-8ef1-74c328a1250c)
+
 
 
 
