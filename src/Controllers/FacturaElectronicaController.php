@@ -20,7 +20,7 @@ use CURLFile;
 use julio101290\boilerplatesells\Models\EnlacexmlModel;
 use julio101290\boilerplateCFDIElectronicSeries\Models\SeriesfacturaelectronicaModel;
 use CfdiUtils\Elements\Pagos20\Pago;
-// use App\Models\PagosModel; ponerlo cuando se pongan los pagos
+use julio101290\boilerplatecomplementopago\Models\PagosModel;
 use julio101290\boilerplatesells\Models\PaymentsModel;
 use \CfdiUtils\SumasPagos20\Calculator;
 use \CfdiUtils\SumasPagos20\Currencies;
@@ -52,7 +52,7 @@ class FacturaElectronicaController extends BaseController {
         $this->xml = new XmlModel();
         $this->xmlEnlace = new EnlacexmlModel();
         $this->serieElectronica = new SeriesfacturaelectronicaModel();
-        //$this->pagos = new PagosModel();
+        $this->pagos = new PagosModel();
         $this->payments = new PaymentsModel();
         //$this->cartePorteModel = new CartaPorteModel();
         //$this->notaCredito = new NotascreditoModel();
