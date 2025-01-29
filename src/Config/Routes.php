@@ -73,10 +73,8 @@ $routes->group('admin', function ($routes) {
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
     );
 
-    $routes->get('xmlenlace/getXMLEnlazadosPagos/(:any)'
-            , 'XmlController::getXMLEnlazadosPagos/$1'
-            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-    );
+    
+
     $routes->get('xmlenlace/getXMLEnlazadosCartaPorte/(:any)'
             , 'SellsController::getXMLEnlazadosCartaPorte/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']

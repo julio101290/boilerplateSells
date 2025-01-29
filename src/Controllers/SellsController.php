@@ -282,7 +282,10 @@ class SellsController extends BaseController {
                         ->where("idDocumento", $datosVenta["id"])
                         ->where("tipo", "ven")->first();
 
-        $this->xmlController->generarPDF($enlaceXML["uuidXML"]);
+        $archivo = $this->xmlController->generarPDF($enlaceXML["uuidXML"],true);
+        
+        echo $archivo;
+        $this->response->setHeader("Content-Type", "application/pdf");
     }
 
     public function newSell() {
