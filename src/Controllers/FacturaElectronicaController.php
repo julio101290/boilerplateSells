@@ -1370,6 +1370,19 @@ class FacturaElectronicaController extends BaseController {
         $atributosSeguroVehiculo["AseguraRespCivil"] = $cartaPorte["AseguraRespCivil"];
         $atributosSeguroVehiculo["PolizaRespCivil"] = $cartaPorte["PolizaRespCivil"];
 
+        if ($cartaPorte["AseguraMedAmbiente"] != "") {
+
+            $atributosSeguroVehiculo["AseguraMedAmbiente"] = $cartaPorte["AseguraMedAmbiente"];
+        }
+
+        if ($cartaPorte["PolizaRespCivil"]) {
+
+            $atributosSeguroVehiculo["PolizaMedAmbiente"] = $cartaPorte["PolizaRespCivil"];
+        }
+
+
+
+
         $autotransporte->addSeguros($atributosSeguroVehiculo);
 
         if ($cartaPorte["remolqueCartaPorte"] != "") {
@@ -1556,6 +1569,18 @@ class FacturaElectronicaController extends BaseController {
                 $atributosMercancia["MaterialPeligroso"] = $value["claveProductoSATMaterialPeligroso"];
             }
 
+
+
+            if ($value["claveTipoEmbalaje"] != "") {
+
+                $atributosMercancia["Embalaje"] = $value["claveTipoEmbalaje"];
+            }
+
+
+            if ($value["descripcionEmbalaje"] != "") {
+
+                $atributosMercancia["DescripEmbalaje"] = $value["descripcionEmbalaje"];
+            }
 
 
 
