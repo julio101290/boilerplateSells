@@ -1351,11 +1351,13 @@
             var cambio = $("#cambio").val();
 
             var tipoComprobanteRD = $("#tipoComprobanteRD").val();
-            var folioComprobanteRD = $("#folioComprobanteRD").val();
+            var folioComprobanteRD = $("#folioComprobanteRD").val() ?? "";
+            folioComprobanteRD = (folioComprobanteRD === "null") ? "" : folioComprobanteRD;
+
 
             var RFCReceptor = $("#RFCReceptor").val();
             var usoCFDIVenta = $("#usoCFDIVenta").val();
-            var metodoPagoVenta = $("#metodoPagoVenta").val();
+            var metodoPagoVenta = $("#metodoPagoVenta").val() === "null" ? "" : $("#metodoPagoVenta").val();
             var formaPagoVenta = $("#formaPagoVenta").val();
             var razonSocialReceptor = $("#razonSocialReceptor").val();
             var codigoPostalReceptor = $("#codigoPostalReceptor").val();

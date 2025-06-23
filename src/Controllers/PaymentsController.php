@@ -74,15 +74,33 @@ class PaymentsController extends BaseController {
         try {
 
 
+            $timestamp = strtotime($datos["datePayment"]);
 
+            if ($timestamp !== false) {
+                $datos["datePayment"] = date('Y-m-d H:i:s', $timestamp);
+            } else {
+                $datos["datePayment"] = null; // o manejar error manualmente
+            }
+           
+            //metodPayment
+            $datos["metodPayment"] = $datos["metodoPago"];
+            
+            if(!isset($datos["idComplemento"])){
+                
+                $datos["idComplemento"] = 0;
+                
+            } 
             if ($this->payments->save($datos) === false) {
+
+                $this->payments->db->transRollback();
 
                 $errores = $this->payments->errors();
                 foreach ($errores as $field => $error) {
                     echo $error . " ";
                 }
 
-                $this->payments->DB::rollback();
+
+
                 return;
             }
             $dateLog["description"] = lang("vehicles.logDescription") . json_encode($datos);
@@ -157,25 +175,20 @@ class PaymentsController extends BaseController {
      * @return type
      */
     public function delete($id) {
-        
+
         $infoPayments = $this->payments->find($id);
-        
+
         $dataSell = $this->sells->find($infoPayments["idSell"]);
-        
-        
-        
+
         $totalPago = $infoPayments["importPayment"] - $infoPayments["importBack"];
-        
+
         $dataSellSave["balance"] = $dataSell["balance"] + $totalPago;
-        
-        
-        
-                
+
         helper('auth');
 
         $auth = service('authentication');
         if (!$auth->check()) {
-            
+
             echo "no conectado";
             return redirect()->route('login');
         }
@@ -183,18 +196,16 @@ class PaymentsController extends BaseController {
         if (!$found = $this->payments->delete($id)) {
             return $this->failNotFound(lang('payments.msg.msg_get_fail'));
         }
-        
+
         /**
          * Actualizamos saldo
          */
-        
-        $resultVenta = $this->sells->update($dataSell["id"],$dataSellSave);
-        
+        $resultVenta = $this->sells->update($dataSell["id"], $dataSellSave);
+
         $this->payments->purgeDeleted();
         $logData["description"] = lang("payments.logDeleted") . json_encode($infoPayments);
         $logData["user"] = $userName;
         $this->log->save($logData);
         return $this->respondDeleted($found, lang('payments.msg_delete'));
     }
-
 }

@@ -105,9 +105,22 @@ class SellsController extends BaseController {
         if ($this->request->isAJAX()) {
 
 
-            $datos = $this->sells->mdlGetSells($empresasID);
+            $params = [
+                'draw' => $this->request->getGet('draw'),
+                'start' => $this->request->getGet('start'),
+                'length' => $this->request->getGet('length'),
+                'order' => $this->request->getGet('order'),
+                'columns' => $this->request->getGet('columns'),
+            ];
 
-            return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+            $datos = $this->sells->mdlGetSells($empresasID, $params);
+
+            return $this->response->setJSON([
+                        'draw' => intval($params['draw']),
+                        'recordsTotal' => $datos['recordsTotal'],
+                        'recordsFiltered' => $datos['recordsFiltered'],
+                        'data' => $datos['data'],
+            ]);
         }
 
 
@@ -149,10 +162,26 @@ class SellsController extends BaseController {
 
         if ($this->request->isAJAX()) {
 
+            $params = [
+                'draw' => $this->request->getGet('draw'),
+                'start' => $this->request->getGet('start'),
+                'length' => $this->request->getGet('length'),
+                'order' => $this->request->getGet('order'),
+                'columns' => $this->request->getGet('columns'),
+            ];
 
-            $datos = $this->sells->mdlGetSellsFilters($empresasID, $desdeFecha, $hastaFecha, $todas, $empresa, $sucursal, $cliente);
+            $datos = $this->sells->mdlGetSellsFilters(
+                    $empresasID, $desdeFecha, $hastaFecha, $todas,
+                    $empresa, $sucursal, $cliente,
+                    $params
+            );
 
-            return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+            return $this->response->setJSON([
+                        'draw' => intval($params['draw']),
+                        'recordsTotal' => $datos['recordsTotal'],
+                        'recordsFiltered' => $datos['recordsFiltered'],
+                        'data' => $datos['data'],
+            ]);
         }
     }
 
@@ -182,10 +211,22 @@ class SellsController extends BaseController {
 
         if ($this->request->isAJAX()) {
 
+            $params = [
+                'draw' => $this->request->getGet('draw'),
+                'start' => $this->request->getGet('start'),
+                'length' => $this->request->getGet('length'),
+                'order' => $this->request->getGet('order'),
+                'columns' => $this->request->getGet('columns'),
+            ];
 
-            $datos = $this->sells->mdlGetSellsFilters($empresasID, $desdeFecha, $hastaFecha, $todas, $empresa, $sucursal, $cliente);
+            $datos = $this->sells->mdlGetSellsFilters($empresasID, $desdeFecha, $hastaFecha, $todas, $empresa, $sucursal, $cliente, $params);
 
-            return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+            return $this->response->setJSON([
+                        'draw' => intval($params['draw']),
+                        'recordsTotal' => $datos['recordsTotal'],
+                        'recordsFiltered' => $datos['recordsFiltered'],
+                        'data' => $datos['data'],
+            ]);
         }
 
         $titulos["desdeFecha"] = $desdeFecha;
@@ -210,9 +251,9 @@ class SellsController extends BaseController {
     public function sellsReport($idEmpresa = 0
             , $idSucursal = 0
             , $idProducto = 0
-            , $from
-            , $to
-            , $cliente) {
+            , $from =null
+            , $to=null
+            , $cliente=0) {
 
 
         $auth = service('authentication');
@@ -282,8 +323,8 @@ class SellsController extends BaseController {
                         ->where("idDocumento", $datosVenta["id"])
                         ->where("tipo", "ven")->first();
 
-        $archivo = $this->xmlController->generarPDF($enlaceXML["uuidXML"],true);
-        
+        $archivo = $this->xmlController->generarPDF($enlaceXML["uuidXML"], true);
+
         echo $archivo;
         $this->response->setHeader("Content-Type", "application/pdf");
     }
@@ -401,13 +442,64 @@ class SellsController extends BaseController {
 
             if (isset($datosVenta)) {
 
-                $datosXMLEnlazados = $this->enlaceXML->mdlGetEnlacexml2($datosVenta["id"]);
+                $request = service('request');
+                $db = \Config\Database::connect();
 
-                return \Hermawan\DataTables\DataTable::of($datosXMLEnlazados)->toJson(true);
+                $columns = ['a.id', 'a.idDocumento', 'a.uuidXML', 'a.tipo', 'a.importe', 'c.status', 'c.archivoXML', 'a.created_at', 'a.updated_at', 'a.deleted_at'];
+
+                // === FROM y JOIN ===
+                $builder = $db->table('enlacexml a');
+                $builder->join('xml c', 'c.uuidTimbre = a.uuidXML');
+
+                // === WHERE principal ===
+                $builder->where('a.idDocumento', $datosVenta["id"]);
+
+                // === Total sin filtro ===
+                $total = $builder->countAllResults(false); // no reset
+                // === Búsqueda global ===
+                $searchValue = $request->getPost('search')['value'] ?? '';
+                if ($searchValue) {
+                    $builder->groupStart();
+                    foreach ($columns as $col) {
+                        $builder->orLike($col, $searchValue);
+                    }
+                    $builder->groupEnd();
+                }
+
+                // === Total filtrado ===
+                $filtered = $builder->countAllResults(false);
+
+                // === Ordenamiento ===
+                $orderColumnIndex = $request->getPost('order')[0]['column'] ?? 0;
+                $orderColumn = $columns[$orderColumnIndex] ?? 'a.id';
+                $orderDir = $request->getPost('order')[0]['dir'] ?? 'asc';
+                $builder->orderBy($orderColumn, $orderDir);
+
+                // === Paginación ===
+                $length = $request->getPost('length') ?? 10;
+                $start = $request->getPost('start') ?? 0;
+                $builder->limit($length, $start);
+
+                // === Ejecutar y devolver ===
+                $query = $builder->get();
+                $data = $query->getResultArray();
+
+                return $this->response->setJSON([
+                            'draw' => intval($request->getPost('draw')),
+                            'recordsTotal' => $total,
+                            'recordsFiltered' => $filtered,
+                            'data' => $data
+                ]);
             } else {
 
-                $datosXMLEnlazados = $this->enlaceXML->select("id,idDocumento,uuidXML,tipo,importe")->where("idDocumento", 0);
-                return \Hermawan\DataTables\DataTable::of($datosXMLEnlazados)->toJson(true);
+                $datos = $this->enlaceXML
+                        ->select('id,idDocumento,uuidXML,tipo,importe')
+                        ->where('idDocumento', 0)
+                        ->findAll();
+
+                return $this->response->setJSON([
+                            'data' => $datos
+                ]);
             }
         } catch (Exception $ex) {
 
@@ -581,7 +673,7 @@ class SellsController extends BaseController {
         $sucursal = $this->sucursales->select("*")->where("id", $titulos["idSucursal"])->first();
         $titulos["nombreSucursal"] = $sucursal["key"] . " " . $sucursal["name"];
 
-        if ($sell["tipoComprobanteRD"] > 0) {
+        if (isset($sell["tipoComprobanteRD"]) && is_numeric($sell["tipoComprobanteRD"]) && $sell["tipoComprobanteRD"] > 0) {
 
             $comprobante = $this->comprobantesRD->find($sell["tipoComprobanteRD"]);
             $titulos["folioComprobanteRD"] = $sell["folioComprobanteRD"];
@@ -660,7 +752,8 @@ class SellsController extends BaseController {
 
             $empresa = $this->empresa->find($datos["idEmpresa"]);
 
-            $comprobante = $this->comprobantesRD->find($datos["tipoComprobanteRD"]);
+            if ($datos["tipoComprobanteRD"] != "")
+                $comprobante = $this->comprobantesRD->find($datos["tipoComprobanteRD"]);
 
             if ($empresa["facturacionRD"] == "on") {
 
@@ -725,9 +818,14 @@ class SellsController extends BaseController {
 
             try {
 
+                $datos1 = array_intersect_key($datos, array_flip($this->sells->allowedFields));
+                $datos1["tipoComprobanteRD"] = "";
+                if ($this->sells->insert($datos1) === false) {
 
-                if ($this->sells->save($datos) === false) {
+                    $db = \Config\Database::connect();
+                    $lastQuery = $db->getLastQuery();
 
+                    log_message('error', 'Último query: ' . $lastQuery);
                     $errores = $this->sells->errors();
 
                     $listErrors = "";
@@ -1380,9 +1478,24 @@ class SellsController extends BaseController {
         $empresasRFC = array_column($titulos["empresas"], "rfc");
 
         if ($this->request->isAJAX()) {
-            $datos = $this->xml->mdlXMLSinAsignar($empresasID, $tipo);
 
-            return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+            $params = [
+                'draw' => $this->request->getGet('draw'),
+                'start' => $this->request->getGet('start'),
+                'length' => $this->request->getGet('length'),
+                'order' => $this->request->getGet('order'),
+                'columns' => $this->request->getGet('columns'),
+                'search' => $this->request->getGet('search'),
+            ];
+
+            $datos = $this->xml->mdlXMLSinAsignar($empresasID, $tipo, $params);
+
+            return $this->response->setJSON([
+                        'draw' => intval($params['draw']),
+                        'recordsTotal' => $datos['recordsTotal'],
+                        'recordsFiltered' => $datos['recordsFiltered'],
+                        'data' => $datos['data'],
+            ]);
         }
     }
 
@@ -1459,7 +1572,7 @@ class SellsController extends BaseController {
 
         $pdf = new PDFLayoutSells(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-        $dataSells = $this->sells->where("uuid", $uuid)->first();
+        $dataSells = $this->sells->where("UUID", $uuid)->first();
 
         $listProducts = json_decode($dataSells["listProducts"], true);
 
@@ -1546,7 +1659,6 @@ class SellsController extends BaseController {
         $lblMsgThanks = lang('newSell.thanks');
         $lblMsgSellNote = lang('newSell.msgSellNote');
         $lblUUIDocument = lang('newSell.documendUUID');
-        
 
         $pdf->SetY(45);
         //ETIQUETAS
