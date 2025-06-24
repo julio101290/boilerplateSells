@@ -459,11 +459,11 @@ class SellsModel extends Model {
     public function mdlVentasPorProductos($idEmpresa = 0
             , $idSucursal = 0
             , $idProducto = 0
-            , $from
-            , $to
-            , $idEmpresas
-            , $idSucursales
-            , $idCliente
+            , $from = null
+            , $to = null
+            , $idEmpresas = null
+            , $idSucursales = null
+            , $idCliente = 0
     ) {
 
 
@@ -541,10 +541,10 @@ class SellsModel extends Model {
     public function mdlVentasPorProductosAgrupado($idEmpresa = 0
             , $idSucursal = 0
             , $idProducto = 0
-            , $from
-            , $to
-            , $idEmpresas
-            , $idSucursales
+            , $from = null
+            , $to = null
+            , $idEmpresas = null
+            , $idSucursales = null
     ) {
 
 
