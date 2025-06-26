@@ -70,7 +70,9 @@ class PaymentsController extends BaseController {
         $datosVenta = $this->sells->select("*")->where("UUID", $datos["UUID"])->asArray()->first();
 
         $datos["idSell"] = $datosVenta["id"];
-
+        $datos["idQuote"] = "0";
+        
+        
         try {
 
 
