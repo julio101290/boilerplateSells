@@ -368,19 +368,17 @@ class SellsModel extends Model {
     }
 
     public function mdlCarteraVencida($empresas, $sucursales) {
+        $builder = $this->db->table('sells a')
+                ->select('b.id, b.razonSocial, SUM(a.balance) AS deuda')
+                ->join('custumers b', 'a.idCustumer = b.id')
+                ->where('a.balance >', 1)
+                ->whereIn('a.idEmpresa', $empresas)
+                ->whereIn('a.idSucursal', $sucursales)
+                ->groupBy(['b.id', 'b.razonSocial'])
+                ->orderBy('deuda', 'DESC')
+                ->limit(10);
 
-        $resultado = $this->db->table('sells a, custumers b')
-                        ->select('b.id,b.razonSocial,SUM(a.balance) AS deuda')
-                        ->where('balance >', 1)
-                        ->where('a.idCustumer', 'b.id', FALSE)
-                        ->whereIn('a.idEmpresa', $empresas)
-                        ->whereIn('a.idEmpresa', $sucursales)
-                        ->groupBy(array('b.id', 'b.razonSocial'))
-                        ->orderBy('SUM(a.balance) DESC')
-                        ->limit(10)
-                        ->get()->getResultArray();
-
-        return $resultado;
+        return $builder->get()->getResultArray();
     }
 
     /**
@@ -538,48 +536,57 @@ class SellsModel extends Model {
      * @param type $idProducto
      * Ventas Filtradas por Empresas, Sucursales y productos
      */
-    public function mdlVentasPorProductosAgrupado($idEmpresa = 0
-            , $idSucursal = 0
-            , $idProducto = 0
-            , $from = null
-            , $to = null
-            , $idEmpresas = null
-            , $idSucursales = null
+    public function mdlVentasPorProductosAgrupado(
+            $idEmpresa = 0,
+            $idSucursal = 0,
+            $idProducto = 0,
+            $from = null,
+            $to = null,
+            $idEmpresas = null,
+            $idSucursales = null
     ) {
+        $builder = $this->db->table('sells a')
+                ->select('b.idProduct, SUM(b.cant) as cant, e.description')
+                ->join('sellsdetails b', 'a.id = b.idSell')
+                ->join('products e', 'b.idProduct = e.id')
+                ->join('empresas c', 'a.idEmpresa = c.id')
+                ->join('branchoffices d', 'a.idSucursal = d.id');
 
+        // Filtros opcionales
+        if (!empty($idEmpresa) && $idEmpresa != '0') {
+            $builder->where('a.idEmpresa', $idEmpresa);
+        }
 
+        if (!empty($idSucursal) && $idSucursal != '0') {
+            $builder->where('a.idSucursal', $idSucursal);
+        }
 
-        $result = $this->db->table('sells a
-                                    , sellsdetails b
-                                    , empresas c
-                                    , branchoffices d
-                                    , products e
-                                    ')
-                        ->select('b.idProduct,sum(cant) as cant,e.description')
-                        ->where('a.id', 'b.idSell', FALSE)
-                        ->where('b.idProduct', 'e.id', FALSE)
-                        ->where('a.idEmpresa', 'c.id', FALSE)
-                        ->where('a.idSucursal', 'd.id', FALSE)
-                        ->groupStart()
-                        ->where('\'0\'', $idEmpresa, true)
-                        ->orWhere('a.idEmpresa', $idEmpresa)
-                        ->groupEnd()
-                        ->groupStart()
-                        ->where('\'0\'', $idSucursal, true)
-                        ->orWhere('a.idSucursal', $idSucursal)
-                        ->groupEnd()
-                        ->groupStart()
-                        ->where('\'0\'', $idProducto, true)
-                        ->orWhere('b.idProduct', $idProducto)
-                        ->groupEnd()
-                        ->where('a.date >=', $from . ' 00:00:00')
-                        ->where('a.date <=', $to . ' 23:59:59')
-                        ->whereIn('a.idEmpresa', $idEmpresas)
-                        ->whereIn('a.idSucursal', $idSucursales)
-                        ->orderBy("sum(cant)")
-                        ->limit(10)
-                        ->groupBy("b.idProduct,e.description")
-                        ->get()->getResultArray();
+        if (!empty($idProducto) && $idProducto != '0') {
+            $builder->where('b.idProduct', $idProducto);
+        }
+
+        if (!empty($from)) {
+            $builder->where('a.date >=', $from . ' 00:00:00');
+        }
+
+        if (!empty($to)) {
+            $builder->where('a.date <=', $to . ' 23:59:59');
+        }
+
+        if (!empty($idEmpresas) && is_array($idEmpresas)) {
+            $builder->whereIn('a.idEmpresa', $idEmpresas);
+        }
+
+        if (!empty($idSucursales) && is_array($idSucursales)) {
+            $builder->whereIn('a.idSucursal', $idSucursales);
+        }
+
+        $result = $builder
+                ->groupBy('b.idProduct, e.description')
+                ->orderBy('cant', 'DESC')
+                ->limit(10)
+                ->get()
+                ->getResultArray();
 
         return $result;
     }

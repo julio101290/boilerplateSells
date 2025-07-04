@@ -73,8 +73,6 @@ $routes->group('admin', function ($routes) {
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
     );
 
-    
-
     $routes->get('xmlenlace/getXMLEnlazadosCartaPorte/(:any)'
             , 'SellsController::getXMLEnlazadosCartaPorte/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
@@ -108,4 +106,19 @@ $routes->group('admin', function ($routes) {
             , 'SellsController::descargaAcuseCancelacion/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
     );
+
+    $routes->get('sells/dashboard/'
+            , 'DashboardController::index'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+    );
+
+    $routes->get('graficas/(:any)/(:any)'
+            , 'DashboardController::traerInfo/$1/$2'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+    );
+
+    $routes->get('graficas/(:any)/(:any)'
+            , 'DashboardController::traerInfo/$1/$2'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
 });
