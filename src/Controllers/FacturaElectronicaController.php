@@ -24,7 +24,7 @@ use julio101290\boilerplatesells\Models\PaymentsModel;
 use \CfdiUtils\SumasPagos20\Calculator;
 use \CfdiUtils\SumasPagos20\Currencies;
 use \CfdiUtils\SumasPagos20\PagosWriter;
-//use App\Models\CartaPorteModel; PUT WHEN ADD PORT LETTER
+use julio101290\boilerplatecartaporte\Models\CartaPorteModel;
 use CfdiUtils\Elements\CartaPorte30\CartaPorte;
 use RegRev\RegRev;
 
@@ -53,7 +53,7 @@ class FacturaElectronicaController extends BaseController {
         $this->serieElectronica = new SeriesfacturaelectronicaModel();
         $this->pagos = new PagosModel();
         $this->payments = new PaymentsModel();
-        //$this->cartePorteModel = new CartaPorteModel();
+        $this->cartePorteModel = new CartaPorteModel();
         //$this->notaCredito = new NotascreditoModel();
         //$this->sellsDetails = new SellsDetailsModel();
 
@@ -1345,15 +1345,14 @@ class FacturaElectronicaController extends BaseController {
         $csd = Credential::openFiles($cerfile, $keyfile, $passPhrase);
 
         //CARTA PORTE
-        $cartaPorteCFDI = new \CfdiUtils\Elements\CartaPorte30\CartaPorte();
+        $cartaPorteCFDI = new \CfdiUtils\Elements\CartaPorte31\CartaPorte();
 
         $atributosCartaPorte["TranspInternac"] = $cartaPorte["TranspInternac"];
         $atributosCartaPorte["TotalDistRec"] = $cartaPorte["TotalDistRec"];
         $atributosCartaPorte["IdCCP"] = RegRev::generate('[C]{3}[a-f0-9A-F]{5}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{12}');
 
         $cartaPorteCFDI->addAttributes($atributosCartaPorte);
-
-        $autotransporte = new \CfdiUtils\Elements\CartaPorte30\Autotransporte();
+        $autotransporte = new \CfdiUtils\Elements\CartaPorte31\Autotransporte();
 
         $atributosTransporte["PermSCT"] = $cartaPorte["PermSCT"];
         $atributosTransporte["NumPermisoSCT"] = $cartaPorte["NumPermisoSCT"];
@@ -1369,7 +1368,6 @@ class FacturaElectronicaController extends BaseController {
 
         $atributosSeguroVehiculo["AseguraRespCivil"] = $cartaPorte["AseguraRespCivil"];
         $atributosSeguroVehiculo["PolizaRespCivil"] = $cartaPorte["PolizaRespCivil"];
-
         if ($cartaPorte["AseguraMedAmbiente"] != "") {
 
             $atributosSeguroVehiculo["AseguraMedAmbiente"] = $cartaPorte["AseguraMedAmbiente"];
@@ -1377,7 +1375,7 @@ class FacturaElectronicaController extends BaseController {
 
         if ($cartaPorte["PolizaRespCivil"]) {
 
-            $atributosSeguroVehiculo["PolizaMedAmbiente"] = $cartaPorte["PolizaRespCivil"];
+            $atributosSeguroVehiculo["PolizaRespCivil"] = $cartaPorte["PolizaRespCivil"];
         }
 
 
@@ -1385,12 +1383,18 @@ class FacturaElectronicaController extends BaseController {
 
         $autotransporte->addSeguros($atributosSeguroVehiculo);
 
+        $autotransporte->addSeguros($atributosSeguroVehiculo);
+
         if ($cartaPorte["remolqueCartaPorte"] != "") {
 
-            $attributoRemolque["SubTipoRem"] = $cartaPorte["SubTipoRem"];
-            $attributoRemolque["Placa"] = $cartaPorte["PlacaSubTipoRemolque"];
 
-            $autotransporte->addRemolques()->addRemolque($attributoRemolque);
+            if ($cartaPorte["PlacaSubTipoRemolque"] != "") {
+
+
+                $attributoRemolque["SubTipoRem"] = $cartaPorte["SubTipoRem"];
+                $attributoRemolque["Placa"] = $cartaPorte["PlacaSubTipoRemolque"];
+                $autotransporte->addRemolques()->addRemolque($attributoRemolque);
+            }
         }
 
 
@@ -1398,7 +1402,7 @@ class FacturaElectronicaController extends BaseController {
         // Figura
         $figuraCartaPorte = $cartaPorteCFDI->getFiguraTransporte();
 
-        $domicilioFigura = new \CfdiUtils\Elements\CartaPorte30\Domicilio();
+        $domicilioFigura = new \CfdiUtils\Elements\CartaPorte31\Domicilio();
 
         $atributosFigura["TipoFigura"] = $cartaPorte["TipoFigura"];
         $atributosFigura["RFCFigura"] = $cartaPorte["RFCFigura"];
@@ -1447,7 +1451,10 @@ class FacturaElectronicaController extends BaseController {
 
         if ($cartaPorte["LocalidadOrigen"] != "") {
 
-            $ubicacionesOrigenDomicilio["Localidad"] = $cartaPorte["LocalidadOrigen"];
+            if ($cartaPorte["LocalidadOrigen"] != "0") {
+
+                $ubicacionesOrigenDomicilio["Localidad"] = $cartaPorte["LocalidadOrigen"];
+            }
         }
 
         if ($cartaPorte["MunicipioOrigen"] != "") {
@@ -1499,7 +1506,10 @@ class FacturaElectronicaController extends BaseController {
 
         if ($cartaPorte["LocalidadDestino"] != "") {
 
-            $ubicacionesDestinoDomicilio["Localidad"] = $cartaPorte["LocalidadDestino"];
+            if ($cartaPorte["LocalidadDestino"] != "0") {
+
+                $ubicacionesDestinoDomicilio["Localidad"] = $cartaPorte["LocalidadDestino"];
+            }
         }
 
         if ($cartaPorte["ReferenciaDestino"] != "") {
@@ -1534,7 +1544,7 @@ class FacturaElectronicaController extends BaseController {
         $listMercancias = json_decode($cartaPorte["listMercancias"], true);
 
         $mercancias = $cartaPorteCFDI->getMercancias();
-        $mercancia = new \CfdiUtils\Elements\CartaPorte30\Mercancia();
+        $mercancia = new \CfdiUtils\Elements\CartaPorte31\Mercancia();
 
         $atributosMercancias["PesoBrutoTotal"] = 0;
         $atributosMercancias["UnidadPeso"] = "KGM";
@@ -1558,32 +1568,47 @@ class FacturaElectronicaController extends BaseController {
             $atributosMercancia["ClaveUnidad"] = $value["ClaveUnidad"];
             $atributosMercancia["Unidad"] = $value["Unidad"];
 
-            if ($value["MaterialPeligroso"] != "") {
+            if (!isset($value["MaterialPeligroso"])) {
+
+                $value["MaterialPeligroso"] = "";
+            } else {
 
                 $atributosMercancia["MaterialPeligroso"] = $value["MaterialPeligroso"];
             }
 
 
-            if ($value["MaterialPeligroso"] != "") {
+            //unset($atributosMercancia["MaterialPeligroso"]);
 
-                $atributosMercancia["MaterialPeligroso"] = $value["claveProductoSATMaterialPeligroso"];
+            if ($atributosMercancia["BienesTransp"] == "24112004") {
+
+                $atributosMercancia["MaterialPeligroso"] = $value["MaterialPeligroso"];
             }
 
 
+            if (isset($atributosMercancia["MaterialPeligroso"])) {
 
-            if ($value["claveTipoEmbalaje"] != "") {
+
+                if ($atributosMercancia["MaterialPeligroso"] == "") {
+
+                    unset($atributosMercancia["MaterialPeligroso"]);
+                }
+            }
+
+
+            if ($value["claveProductoSATMaterialPeligroso"]) {
+
+                $atributosMercancia["CveMaterialPeligroso"] = $value["claveProductoSATMaterialPeligroso"];
+            }
+
+            if ($value["claveTipoEmbalaje"]) {
 
                 $atributosMercancia["Embalaje"] = $value["claveTipoEmbalaje"];
             }
 
-
-            if ($value["descripcionEmbalaje"] != "") {
+            if ($value["descripcionEmbalaje"]) {
 
                 $atributosMercancia["DescripEmbalaje"] = $value["descripcionEmbalaje"];
             }
-
-
-
 
             $atributosMercancia["PesoEnKg"] = $value["PesoEnKg"];
 
@@ -1593,7 +1618,7 @@ class FacturaElectronicaController extends BaseController {
             $atributosMercanciaTransporta["IDOrigen"] = "OR" . str_pad($cartaPorte["IDUbicacionOrigen"], 6, "0", STR_PAD_LEFT);
             $atributosMercanciaTransporta["IDDestino"] = "DE" . str_pad($cartaPorte["IDUbicacionDestino"], 6, "0", STR_PAD_LEFT);
 
-            $pesoBrutoTotal = $pesoBrutoTotal + $atributosMercancia["PesoEnKg"];
+            $pesoBrutoTotal = number_format($pesoBrutoTotal, 6, ".", "") + number_format($atributosMercancia["PesoEnKg"], 6, ".", "");
 
             //$mercancia->addCantidadTransporta($atributosMercanciaTransporta);
 
@@ -1679,6 +1704,7 @@ class FacturaElectronicaController extends BaseController {
             // Verificamos si lleva Impuesto
             $objetoImpuesto = "01";
 
+            /*
             if ($value["porcentTax"] > 0) {
 
 
@@ -1695,6 +1721,8 @@ class FacturaElectronicaController extends BaseController {
 
                 $objetoImpuesto = "02";
             }
+             * 
+             */
 
             $concepto = $comprobante->addConcepto([
                 'ClaveProdServ' => $value["claveProductoSAT"],
@@ -1706,6 +1734,8 @@ class FacturaElectronicaController extends BaseController {
                 'Importe' => number_format($value["total"], 2, "."),
                 'ObjetoImp' => $objetoImpuesto,
             ]);
+            
+            /*
 
             if ($value["porcentTax"] > 0) {
 
@@ -1751,6 +1781,8 @@ class FacturaElectronicaController extends BaseController {
                     'Importe' => number_format($importeImpuesto, 2, "."),
                 ]);
             }
+             * 
+             */
         }
 
         $comprobante->addComplemento($cartaPorteCFDI);
