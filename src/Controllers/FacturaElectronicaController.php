@@ -397,6 +397,17 @@ class FacturaElectronicaController extends BaseController {
 
             $nombreXML = $uuidVenta . ".xml";
 
+            // Ruta al directorio writable/xml
+            $directorio = WRITEPATH . 'xml/';
+
+            if (!is_dir($directorio)) {
+                mkdir($directorio, 0755, true); // permisos y creación recursiva
+            }
+
+
+
+            $nombreXML = $directorio . $uuidVenta . ".xml";
+
             file_put_contents($nombreXML, $archivoDestino);
 
             // el PreCFDI a firmar, podría venir de CfdiUtils ;) $creator->asXml()
@@ -433,7 +444,16 @@ class FacturaElectronicaController extends BaseController {
 
             $archivoDestino = $xml;
 
-            $nombreXML = $uuidVenta . ".xml";
+            // Ruta al directorio writable/xml
+            $directorio = WRITEPATH . 'xml/';
+
+            if (!is_dir($directorio)) {
+                mkdir($directorio, 0755, true); // permisos y creación recursiva
+            }
+
+
+
+            $nombreXML = $directorio . $uuidVenta . ".xml";
 
             file_put_contents($nombreXML, $archivoDestino);
 
@@ -1071,7 +1091,14 @@ class FacturaElectronicaController extends BaseController {
 
             $archivoDestino = $xml;
 
-            $nombreXML = $uuidNotaCredito . ".xml";
+            // Ruta al directorio writable/xml
+            $directorio = WRITEPATH . 'xml/';
+
+            if (!is_dir($directorio)) {
+                mkdir($directorio, 0755, true); // permisos y creación recursiva
+            }
+
+            $nombreXML = $directorio . $uuidNotaCredito . ".xml";
 
             file_put_contents($nombreXML, $archivoDestino);
 
@@ -1705,22 +1732,22 @@ class FacturaElectronicaController extends BaseController {
             $objetoImpuesto = "01";
 
             /*
-            if ($value["porcentTax"] > 0) {
+              if ($value["porcentTax"] > 0) {
 
 
-                $objetoImpuesto = "02";
-            }
+              $objetoImpuesto = "02";
+              }
 
 
-            if ($value["porcentIVARetenido"] > 0) {
+              if ($value["porcentIVARetenido"] > 0) {
 
-                $objetoImpuesto = "02";
-            }
+              $objetoImpuesto = "02";
+              }
 
-            if ($value["porcentISRRetenido"] > 0) {
+              if ($value["porcentISRRetenido"] > 0) {
 
-                $objetoImpuesto = "02";
-            }
+              $objetoImpuesto = "02";
+              }
              * 
              */
 
@@ -1734,53 +1761,53 @@ class FacturaElectronicaController extends BaseController {
                 'Importe' => number_format($value["total"], 2, "."),
                 'ObjetoImp' => $objetoImpuesto,
             ]);
-            
+
             /*
 
-            if ($value["porcentTax"] > 0) {
+              if ($value["porcentTax"] > 0) {
 
 
-                $porc = number_format(($value["porcentTax"] / 100), 6, ".");
+              $porc = number_format(($value["porcentTax"] / 100), 6, ".");
 
-                $importeImpuesto = number_format($value["total"], 2, ".") * $porc;
-                $concepto->addTraslado([
-                    'Base' => number_format($value["total"], 2, "."),
-                    'Impuesto' => '002',
-                    'TipoFactor' => 'Tasa',
-                    'TasaOCuota' => $porc,
-                    'Importe' => number_format($importeImpuesto, 2, "."),
-                ]);
-            }
+              $importeImpuesto = number_format($value["total"], 2, ".") * $porc;
+              $concepto->addTraslado([
+              'Base' => number_format($value["total"], 2, "."),
+              'Impuesto' => '002',
+              'TipoFactor' => 'Tasa',
+              'TasaOCuota' => $porc,
+              'Importe' => number_format($importeImpuesto, 2, "."),
+              ]);
+              }
 
-            if ($value["porcentIVARetenido"] > 0) {
-
-
-                $porc = number_format(($value["porcentIVARetenido"] / 100), 6, ".");
-
-                $importeImpuesto = number_format($value["total"], 2, ".") * $porc;
-                $concepto->addRetencion([
-                    'Base' => number_format($value["total"], 2, "."),
-                    'Impuesto' => '002',
-                    'TipoFactor' => 'Tasa',
-                    'TasaOCuota' => $porc,
-                    'Importe' => number_format($importeImpuesto, 2, "."),
-                ]);
-            }
-
-            if ($value["porcentISRRetenido"] > 0) {
+              if ($value["porcentIVARetenido"] > 0) {
 
 
-                $porc = number_format(($value["porcentISRRetenido"] / 100), 6, ".");
+              $porc = number_format(($value["porcentIVARetenido"] / 100), 6, ".");
 
-                $importeImpuesto = number_format($value["total"], 2, ".") * $porc;
-                $concepto->addRetencion([
-                    'Base' => number_format($value["total"], 2, "."),
-                    'Impuesto' => '001',
-                    'TipoFactor' => 'Tasa',
-                    'TasaOCuota' => $porc,
-                    'Importe' => number_format($importeImpuesto, 2, "."),
-                ]);
-            }
+              $importeImpuesto = number_format($value["total"], 2, ".") * $porc;
+              $concepto->addRetencion([
+              'Base' => number_format($value["total"], 2, "."),
+              'Impuesto' => '002',
+              'TipoFactor' => 'Tasa',
+              'TasaOCuota' => $porc,
+              'Importe' => number_format($importeImpuesto, 2, "."),
+              ]);
+              }
+
+              if ($value["porcentISRRetenido"] > 0) {
+
+
+              $porc = number_format(($value["porcentISRRetenido"] / 100), 6, ".");
+
+              $importeImpuesto = number_format($value["total"], 2, ".") * $porc;
+              $concepto->addRetencion([
+              'Base' => number_format($value["total"], 2, "."),
+              'Impuesto' => '001',
+              'TipoFactor' => 'Tasa',
+              'TasaOCuota' => $porc,
+              'Importe' => number_format($importeImpuesto, 2, "."),
+              ]);
+              }
              * 
              */
         }
@@ -1816,7 +1843,14 @@ class FacturaElectronicaController extends BaseController {
 
         $archivoDestino = $xml;
 
-        $nombreXML = $uuidCartaPorte . ".xml";
+        $directorio = WRITEPATH . 'xml/';
+
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0755, true); // permisos y creación recursiva
+        }
+
+
+        $nombreXML = $directorio . $uuidCartaPorte . ".xml";
 
         file_put_contents($nombreXML, $archivoDestino);
 
@@ -2355,6 +2389,17 @@ class FacturaElectronicaController extends BaseController {
 
         $nombreXML = $uuidPago . ".xml";
 
+        // Ruta al directorio writable/xml
+        $directorio = WRITEPATH . 'xml/';
+
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0755, true); // permisos y creación recursiva
+        }
+
+
+
+        $nombreXML = $directorio . $uuidPago . ".xml";
+
         file_put_contents($nombreXML, $archivoDestino);
 
         // método de ayuda para validar usando las validaciones estándar de creación de la librería
@@ -2381,7 +2426,16 @@ class FacturaElectronicaController extends BaseController {
 
         $archivoDestino = $xml;
 
-        $nombreXML = $uuidPago . ".xml";
+        // Ruta al directorio writable/xml
+        $directorio = WRITEPATH . 'xml/';
+
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0755, true); // permisos y creación recursiva
+        }
+
+
+
+        $nombreXML = $directorio . $uuidPago . ".xml";
 
         file_put_contents($nombreXML, $archivoDestino);
 
