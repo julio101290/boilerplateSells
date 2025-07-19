@@ -41,6 +41,10 @@ class BoilerplateSells extends Seeder {
 
         // Assign Permission to user
         $this->authorize->addPermissionToUser('sells-permission', 1);
+        
+        $this->authorize->createPermission('listaNotaCredito-permission', 'Permiso para la lista de notas de crédito');
+        $this->authorize->addPermissionToGroup('listaNotaCredito-permission', 'admin');
+        $this->authorize->addPermissionToUser('listaNotaCredito-permission', 1);
 
     }
 

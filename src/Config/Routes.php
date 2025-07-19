@@ -121,4 +121,63 @@ $routes->group('admin', function ($routes) {
             , 'DashboardController::traerInfo/$1/$2'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
             );
+    
+    
+    /**
+     * Rutas para las notas de crédito
+     */
+    $routes->resource('notascredito', [
+        'filter' => 'permission:listaNotaCredito-permission',
+        'controller' => 'NotasCreditoController',
+        'except' => 'show',
+        'namespace' => 'julio101290\boilerplatesells\Controllers'
+    ]);
+
+    $routes->get('notasCredito/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'
+            , 'NotasCreditoController::notasCreditoFilters/$1/$2/$3/$4/$5/$6'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+    
+    $routes->get('editNotaCredito/(:any)'
+            , 'NotasCreditoController::editNotaCredito/$1'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+    $routes->get('pagos/delete/(:any)'
+            , 'NotasCreditoController::delete/$1'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+    
+    $routes->get('timbrarNotaCredito/(:any)'
+            , 'FacturaElectronicaController::timbrarNotaCredito/$1'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+
+    $routes->get('xml/generarPDFDesdeNotaCredito/(:any)'
+            , 'XmlController::generaPDFDesdeNotaCredito/$1'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+
+    $routes->get('newNotaCredito'
+            , 'NotasCreditoController::newNotaCredito'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+
+    $routes->post('notasCredito/save'
+            , 'NotasCreditoController::save'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+
+    $routes->get('xml/generarPDFNotaCredito/(:any)'
+            , 'NotasCreditoController::generaPDFDesdeNotaCredito/$1'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+    
+    $routes->get('xml/generarPDFDesdeRemNotaCredito/(:any)'
+            , 'XmlController::generaPDFNotaCredito/$1'
+            , ['namespace' => 'julio101290\FacturaElectronicaController\Controllers']
+            );
+    $routes->get('xmlenlace/getXMLEnlazadosNotaCredito/(:any)'
+            , 'XmlController::getXMLEnlazadosNotaCredito/$1'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
 });

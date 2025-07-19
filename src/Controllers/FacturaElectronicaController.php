@@ -27,6 +27,7 @@ use \CfdiUtils\SumasPagos20\PagosWriter;
 use julio101290\boilerplatecartaporte\Models\CartaPorteModel;
 use CfdiUtils\Elements\CartaPorte30\CartaPorte;
 use RegRev\RegRev;
+use julio101290\boilerplatesells\Models\NotasCreditoModel;
 
 //use App\Models\NotascreditoModel; // ADD WHEN ADD CREDIT NOTES
 
@@ -54,7 +55,7 @@ class FacturaElectronicaController extends BaseController {
         $this->pagos = new PagosModel();
         $this->payments = new PaymentsModel();
         $this->cartePorteModel = new CartaPorteModel();
-        //$this->notaCredito = new NotascreditoModel();
+        $this->notaCredito = new NotascreditoModel();
         //$this->sellsDetails = new SellsDetailsModel();
 
         helper('menu');
@@ -752,33 +753,22 @@ class FacturaElectronicaController extends BaseController {
                 ->findAll();
 
         $cfdiRelacionado = $comprobante->addCfdiRelacionados([
-            'TipoRelacion' => "01", // Tipo Relacion
+            'TipoRelacion' => $notaCredito["tipoDocumentoRelacionado"], // Tipo Relacion
+         
+        ])->addCfdiRelacionado([
+              'UUID' => $notaCredito["UUIDRelacion"], // Tipo Relacion
         ]);
+        
 
-        foreach ($ventasNotaCredito as $key => $value) {
-
-
-            $enlaceXMLVenta = $this->xmlEnlace
-                            ->where("idDocumento", $value["idSell"])
-                            ->where("tipo", "ven")->first();
-
-            if (count($enlaceXMLVenta) == 0) {
-
-                echo "No se encontro documento enlazado para la id de venta " . $value["idSell"];
-                return;
-            }
-
-
-            $cfdiRelacionado->addCfdiRelacionado([
-                'UUID' => $enlaceXMLVenta["uuidXML"], // Tipo Relacion
-            ]);
-        }
+         
 
         // No agrego (aunque puedo) el Rfc y Nombre porque uso los que están establecidos en el certificado
         $comprobante->addEmisor([
             'RegimenFiscal' => $empresa["regimenFiscal"], // General de Ley Personas Morales
-            'Nombre' => $empresa["razonSocial"], // Agregamos el Nombre por que en el certificado viene SA DE CV
         ]);
+        
+        
+        
 
         //$comprobante->addReceptor([/* Atributos del receptor */]);
 
@@ -807,15 +797,17 @@ class FacturaElectronicaController extends BaseController {
           }
 
          */
-        $listPagos = json_decode($notaCredito["listPagos"], true);
+        $listProducts = json_decode($notaCredito["listProducts"], true);
 
-        foreach ($listPagos as $key => $value) {
+        foreach ($listProducts as $key => $value) {
 
             $concepto = null;
 
-            $value["claveProductoSAT"] = "84111506";
+            if ($value["unidad"] == "" || $value["unidad"] == "NULL") {
 
-            $value["claveUnidadSAT"] = "ACT";
+                echo "Falta capturar la unidad del producto" . $value["description"];
+                return;
+            }
 
             if ($value["claveProductoSAT"] == "" || $value["claveProductoSAT"] == "NULL") {
 
@@ -829,90 +821,72 @@ class FacturaElectronicaController extends BaseController {
                 return;
             }
 
-            $venta = $this->sells->select("*")->where("id", $value["idSell"])->first();
-            $enlace = $this->xmlEnlace->select("*")->where("idDocumento", $notaCredito["id"])->first();
-            $xmlVenta = $this->xml->select("*")->where("uuidTimbre", $enlace["uuidXML"])->first();
-
-            $IVAVenta16 = $this->sellsDetails->selectSum("tax")
-                    ->where("idSell", $venta["id"])
-                    ->where("porcentTax", 16)
-                    ->first();
-
-            $IVAVenta16 = esCero($IVAVenta16["tax"]);
-
-            $IVAVenta8 = $this->sellsDetails->selectSum("tax")
-                    ->where("idSell", $venta["id"])
-                    ->where("porcentTax", 8)
-                    ->first();
-
-            $IVAVenta8 = esCero($IVAVenta8["tax"]);
-
-            $totalIVARetenido = esCero($venta["IVARetenido"]);
-
-            $totalISRRetenido = esCero($venta["ISRRetenido"]);
-
-            if (count($xmlVenta) == 0) {
-
-                echo "No se encontro el xml de la venta con UUID: " . $enlace["uuidXML"];
-                return;
-            }
-
             // Verificamos si lleva Impuesto
             $objetoImpuesto = "01";
 
-            if ($IVAVenta16 > 0 || $IVAVenta8 > 0) {
+            if ($value["porcentTax"] > 0) {
 
 
                 $objetoImpuesto = "02";
             }
 
 
-            if ($xmlVenta["tasaExenta"] > 0) {
+            if ($value["importeExento"] > 0) {
+
 
                 $objetoImpuesto = "02";
             }
 
 
-            if ($totalIVARetenido > 0) {
+            if ($value["porcentIVARetenido"] > 0) {
 
                 $objetoImpuesto = "02";
             }
 
-            if ($totalISRRetenido > 0) {
+            if ($value["porcentISRRetenido"] > 0) {
 
                 $objetoImpuesto = "02";
             }
-            $value["description"] = "Nota de Crédito de la factura con folio de venta " . $venta["folio"];
-
-            $value["cant"] = "1";
 
             $concepto = $comprobante->addConcepto([
                 'ClaveProdServ' => $value["claveProductoSAT"],
                 'Cantidad' => $value["cant"],
                 'ClaveUnidad' => $value["claveUnidadSAT"],
+                'Unidad' => $value["unidad"],
                 'Descripcion' => $value["description"],
-                'ValorUnitario' => $value["importeAPagar"],
-                'Importe' => number_format($value["importeAPagar"], 2, ".", ''),
+                'ValorUnitario' => $value["price"],
+                'Importe' => number_format($value["total"], 2, ".", ''),
                 'ObjetoImp' => $objetoImpuesto,
             ]);
 
-            if ($IVAVenta16 > 0) {
+            if (isset($value["predial"])) {
 
 
-                $porc = number_format((16 / 100), 6, ".", '');
+                if ($value["predial"] == "null") {
 
-                /**
-                 * Calculo de la base
-                 * $xmlVenta
-                 */
-                $baseImporte = (number_format($value["importeAPagar"], 2, ".", '')) / (1 + $porc);
+                    echo "El predial no puede ser nulo";
+                    return;
+                }
 
-                $impuesto16NotaCredito = number_format($baseImporte, 2, ".", '') * $porc;
+                if ($value["predial"] != "") {
 
-                $importeImpuesto = $baseImporte * $porc;
 
+
+                    $concepto->addCuentaPredial([
+                        'Numero' => $value["predial"],
+                    ]);
+                }
+            }
+
+
+            if ($value["porcentTax"] > 0) {
+
+
+                $porc = number_format(($value["porcentTax"] / 100), 6, ".", '');
+
+                $importeImpuesto = number_format($value["total"], 2, ".", '') * $porc;
                 $concepto->addTraslado([
-                    'Base' => number_format($baseImporte, 2, ".", ''),
+                    'Base' => number_format($value["total"], 2, ".", ''),
                     'Impuesto' => '002',
                     'TipoFactor' => 'Tasa',
                     'TasaOCuota' => $porc,
@@ -921,109 +895,52 @@ class FacturaElectronicaController extends BaseController {
             }
 
 
-            /*
-             * IVA AL 8 porciento
-             */
+            if ($value["importeExento"] > 0) {
 
 
-            if ($IVAVenta8 > 0) {
+                $porc = number_format(($value["porcentTax"] / 100), 6, ".", '');
 
-
-                $porc = number_format((8 / 100), 6, ".", '');
-
-                /**
-                 * Calculo de la base
-                 * $xmlVenta
-                 */
-                $baseImporte = (number_format($value["importeAPagar"], 2, ".", '')) / (1 + $porc);
-
-                $impuesto8NotaCredito = number_format($baseImporte, 2, ".", '') * $porc;
-
-                $impuesto8NotaCredito = $baseImporte * $porc;
-
+                $importeImpuesto = number_format($value["total"], 2, ".", '') * $porc;
                 $concepto->addTraslado([
-                    'Base' => number_format($baseImporte, 2, ".", ''),
-                    'Impuesto' => '002',
-                    'TipoFactor' => 'Tasa',
-                    'TasaOCuota' => $porc,
-                    'Importe' => number_format($impuesto8NotaCredito, 2, ".", ''),
-                ]);
-            }
-
-
-            if ($xmlVenta["tasaExenta"] > 0) {
-
-
-
-
-
-
-                /*
-                  $baseImporte = (number_format($value["total"], 2, ".", '') / number_format($xmlVenta["total"], 2, ".", '')) * number_format($value["total"], 2, ".", '');
-
-                  $baseImporte = ((number_format($baseImporte, 2, ".", '')) / number_format($xmlVenta["tasaExenta"], 2, ".", ''));
-                 */
-                $concepto->addTraslado([
-                    'Base' => number_format($baseImporte, 2, ".", ''),
+                    'Base' => number_format($value["importeExento"], 2, ".", ''),
                     'Impuesto' => '002',
                     'TipoFactor' => 'Exento',
                 ]);
             }
 
-            if ($totalIVARetenido > 0) {
+            if ($value["porcentIVARetenido"] > 0) {
 
 
-                $impuestosIvaRetenido = $this->sells->mdlIVARetenidoTotales($venta["id"]);
+                $porc = number_format(($value["porcentIVARetenido"] / 100), 6, ".");
 
-                foreach ($impuestosIvaRetenido as $key => $value2) {
-
-                    $porc = number_format(($value2["porcentIVARetenido"] / 100), 6, ".", '');
-
-                    /**
-                     * Calculo de la base
-                     * $xmlVenta
-                     */
-                    $baseImporte = (number_format($value["importeAPagar"], 2, ".", '')) / (1 + $porc);
-
-                    $importeImpuesto = number_format($baseImporte, 2, ".", '') * $porc;
-
-                    $concepto->addRetencion([
-                        'Base' => number_format($baseImporte, 2, ".", ''),
-                        'Impuesto' => '002',
-                        'TipoFactor' => 'Tasa',
-                        'TasaOCuota' => $porc,
-                        'Importe' => number_format($importeImpuesto, 2, ".", ''),
-                    ]);
-                }
+                $importeImpuesto = number_format($value["total"], 2, ".", '') * $porc;
+                $concepto->addRetencion([
+                    'Base' => number_format($value["total"], 2, ".", ''),
+                    'Impuesto' => '002',
+                    'TipoFactor' => 'Tasa',
+                    'TasaOCuota' => $porc,
+                    'Importe' => number_format($importeImpuesto, 2, ".", ''),
+                ]);
             }
 
-            if ($totalISRRetenido > 0) {
-
-                $impuestosISRRetenido = $this->sells->mdlISRRetenidoTotales($venta["id"]);
-
-                foreach ($impuestosISRRetenido as $key => $value2) {
+            if ($value["porcentISRRetenido"] > 0) {
 
 
-                    $porc = number_format(($value2["porcentISRRetenido"] / 100), 6, ".", '');
+                $porc = number_format(($value["porcentISRRetenido"] / 100), 6, ".");
 
-                    /**
-                     * Calculo de la base
-                     * $xmlVenta
-                     */
-                    $baseImporte = (number_format($value["importeAPagar"], 2, ".", '')) / (1 + $porc);
+                $importeImpuesto = 0;
 
-                    $importeImpuesto = number_format($baseImporte, 2, ".", '') * $porc;
-
-                    $concepto->addRetencion([
-                        'Base' => number_format($baseImporte, 2, ".", ''),
-                        'Impuesto' => '001',
-                        'TipoFactor' => 'Tasa',
-                        'TasaOCuota' => $porc,
-                        'Importe' => number_format($importeImpuesto, 2, ".", ''),
-                    ]);
-                }
+                $importeImpuesto = number_format($value["total"], 2, ".", '') * number_format($porc, 6, ".");
+                $concepto->addRetencion([
+                    'Base' => number_format($value["total"], 2, ".", ''),
+                    'Impuesto' => '001',
+                    'TipoFactor' => 'Tasa',
+                    'TasaOCuota' => $porc,
+                    'Importe' => number_format($importeImpuesto, 2, ".", ''),
+                ]);
             }
         }
+
 
 
         $creator->addSumasConceptos(null, 2);
@@ -1200,7 +1117,7 @@ class FacturaElectronicaController extends BaseController {
 
         $datosXML["uuidTimbre"] = $tfd['UUID'];
         $datosXML["uuidPaquete"] = "SISTEMA";
-        $datosXML["idEmpresa"] = $venta["idEmpresa"];
+        $datosXML["idEmpresa"] = $notaCredito["idEmpresa"];
         $datosXML["archivoXML"] = $respuesta["data"]["cfdi"];
 
         //  $jsonXML = JsonConverter::convertToJson($content);
