@@ -61,7 +61,7 @@
         autoWidth: false,
         order: [[1, 'asc']],
         ajax: {
-            url: '<?= base_url('admin/xml/xmlSinAsignar/P') ?>',
+            url: '<?= base_url('admin/xml/xmlSinAsignar/E') ?>',
             method: 'GET',
             dataType: "json"
         },

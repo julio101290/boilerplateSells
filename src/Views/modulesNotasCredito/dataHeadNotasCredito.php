@@ -38,7 +38,7 @@
 
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="documentosRelacionados-tab" data-toggle="tab" data-target="#documentosRelacionados" type="button" role="tab" aria-controls="documentosRelacionados" aria-selected="false">
-                            <?= lang('newSell.relationDocuments') ?>
+                            <?= lang('newCreditNote.relationDocuments') ?>
                         </button>
                     </li>
 
@@ -87,7 +87,7 @@
     <div class="col-12">
         <div class="card card-default">
             <div class="card-header">
-                <h3 class="card-title"><?= lang('newSell.sellDetail') ?></h3>
+                <h3 class="card-title"><?= lang('newCreditNote.creditNoteDetail') ?></h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -114,12 +114,12 @@
                                     <!--=====================================
                                 ENCABEZADO
                                 ======================================-->
-                                    <div class="col-1"> <?= lang('newSell.fields.row') ?> </div>
-                                    <div class="d-none d-lg-table-cell col-1 "> <?= lang('newSell.fields.code') ?> </div>
-                                    <div class="col-7"> <?= lang('newSell.fields.description') ?> </div>
-                                    <div class="col-1"><?= lang('newSell.fields.amount') ?> </div>
-                                    <div class="col-1"><?= lang('newSell.fields.price') ?> </div>
-                                    <div class="col-1"><?= lang('newSell.fields.total') ?> </div>
+                                    <div class="col-1"> <?= lang('newCreditNote.fields.row') ?> </div>
+                                    <div class="d-none d-lg-table-cell col-1 "> <?= lang('newCreditNote.fields.code') ?> </div>
+                                    <div class="col-7"> <?= lang('newCreditNote.fields.description') ?> </div>
+                                    <div class="col-1"><?= lang('newCreditNote.fields.amount') ?> </div>
+                                    <div class="col-1"><?= lang('newCreditNote.fields.price') ?> </div>
+                                    <div class="col-1"><?= lang('newCreditNote.fields.total') ?> </div>
 
 
                                 </div>
@@ -260,7 +260,7 @@
                                 <div class="col-3" style="
                                      vertical-align: middle;
                                      ">
-                                    <label style="vertical-align: sub;margin-bottom: 0px;"><?= lang('newSell.subTotal') ?>:</label>
+                                    <label style="vertical-align: sub;margin-bottom: 0px;"><?= lang('newCreditNote.subTotal') ?>:</label>
                                 </div>
 
                                 <div class="col-2">
@@ -283,7 +283,7 @@
                                      ">
                                     <label style="
                                            vertical-align: sub;
-                                           "><?= lang('newSell.tax') ?>:</label>
+                                           "><?= lang('newCreditNote.tax') ?>:</label>
                                 </div>
 
                                 <div class="col-2">
@@ -306,7 +306,7 @@
                                      ">
                                     <label style="
                                            vertical-align: sub;
-                                           "><?= lang('newSell.VATWithholding') ?>:</label>
+                                           "><?= lang('newCreditNote.VATWithholding') ?>:</label>
                                 </div>
 
                                 <div class="col-2">
@@ -328,7 +328,7 @@
                                      ">
                                     <label style="
                                            vertical-align: sub;
-                                           "><?= lang('newSell.exemptRate') ?>:</label>
+                                           "><?= lang('newCreditNote.exemptRate') ?>:</label>
                                 </div>
 
                                 <div class="col-2">
@@ -350,7 +350,7 @@
                                      ">
                                     <label style="
                                            vertical-align: sub;
-                                           "><?= lang('newSell.ISRWithholding') ?>:</label>
+                                           "><?= lang('newCreditNote.ISRWithholding') ?>:</label>
                                 </div>
 
 
@@ -373,7 +373,7 @@
                                      ">
                                     <label style="
                                            vertical-align: sub;
-                                           "><?= lang('newSell.total') ?>:</label>
+                                           "><?= lang('newCreditNote.total') ?>:</label>
                                 </div>
 
                                 <div class="col-2">
@@ -387,14 +387,14 @@
 
 
                             <button type="button" class="btn btn-primary pull-right btnSaveNotaCredito" data-toggle="modal">
-                                <i class="fa far fa-save"> </i><?= lang('newSell.save') ?></button>
+                                <i class="fa far fa-save"> </i><?= lang('newCreditNote.save') ?></button>
 
                             <button type="button" class="btn bg-maroon btnPrint" data-toggle="modal" required="" data-placement="top" title="Imprimir">
-                                <i class="fa fa-print"> </i> <?= lang('newSell.savePrintClose') ?>
+                                <i class="fa fa-print"> </i> <?= lang('newCreditNote.savePrintClose') ?>
                             </button>
 
                             <button type="button" class="btn bg-maroon btnTimbrar" data-toggle="modal" required="" data-placement="top" title="Timbrar">
-                                <i class="fas fa-qrcode"> </i> <?= lang('newSell.stamp') ?>
+                                <i class="fas fa-qrcode"> </i> <?= lang('newCreditNote.stamp') ?>
                             </button>
 
                         </div>
@@ -1205,7 +1205,7 @@
                     $(".btnTimbrar").removeAttr("disabled");
 
 
-                    window.open("<?= base_url('admin/xml/generaPDFNotaCredito') ?>" + "/" + UUID, "_blank");
+                    window.open("<?= base_url('admin/xml/generarPDFNotaCredito') ?>" + "/" + UUID, "_blank");
                     return true;
 
                 } else {
@@ -1434,7 +1434,7 @@
 
             Toast.fire({
                 icon: 'error',
-                title: "<?= lang('newSell.selectCompanie') ?>"
+                title: "<?= lang('newCreditNote.selectCompanie') ?>"
             });
 
             return false;
@@ -1445,7 +1445,7 @@
 
             Toast.fire({
                 icon: 'error',
-                title: "<?= lang('newSell.selectCustumer') ?>"
+                title: "<?= lang('newCreditNote.selectCustumer') ?>"
             });
 
             return false;
@@ -1457,7 +1457,7 @@
 
             Toast.fire({
                 icon: 'error',
-                title: "<?= lang('newSell.selectBranchoffice') ?>"
+                title: "<?= lang('newCreditNote.selectBranchoffice') ?>"
             });
 
             return false;
@@ -1469,7 +1469,7 @@
 
             Toast.fire({
                 icon: 'error',
-                title: "<?= lang('newSell.selectBranchoffice') ?>"
+                title: "<?= lang('newCreditNote.selectBranchoffice') ?>"
             });
 
             return false;

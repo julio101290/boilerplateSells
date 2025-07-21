@@ -177,7 +177,7 @@ $routes->group('admin', function ($routes) {
             , ['namespace' => 'julio101290\FacturaElectronicaController\Controllers']
             );
     $routes->get('xmlenlace/getXMLEnlazadosNotaCredito/(:any)'
-            , 'XmlController::getXMLEnlazadosNotaCredito/$1'
+            , 'NotasCreditoController::getXMLEnlazados/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
             );
 });

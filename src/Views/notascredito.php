@@ -38,7 +38,7 @@
 
 
                 <div class="form-group">
-                    <label for="idEmpresa">Empresa </label>
+                    <label for="idEmpresa"><?= lang("notasCredito.companie") ?></label>
                     <select id='idEmpresa' name='idEmpresa' class="idEmpresa" style='width: 80%;'>
 
                         <?php
@@ -47,7 +47,7 @@
                             echo "   <option value='$idEmpresa'>$idEmpresa - $nombreEmpresa</option>";
                         } else {
 
-                            echo "  <option value='0'>Todas las empresas</option>";
+                            echo "  <option value='0'>".lang("notasCredito.allCompanies")."</option>";
 
                             foreach ($empresas as $key => $value) {
 
@@ -67,11 +67,11 @@
 
 
                 <div class="form-group">
-                    <label for="idSucursal">Sucursal </label>
+                    <label for="idSucursal"><?= lang("notasCredito.branchoffice") ?> </label>
                     <select id='idSucursal' name='idSucursal' class="idSucursal" style='width: 100%;'>
 
                         <?php
-                        echo "  <option value='0'>Todas las Sucursales</option>";
+                        echo "  <option value='0'>". lang("notasCredito.AllBranchoffice")  ."</option>";
                         if (isset($idSucursal)) {
 
                             echo "   <option value='$idSucursal'>$idSucursal - $nombreSucursal</option>";
@@ -91,11 +91,11 @@
 
 
                 <div class="form-group">
-                    <label for="productos">Cliente </label>
+                    <label for="productos"><?= lang("notasCredito.custumer") ?> </label>
                     <select id='clientes' name='clientes' class="clientes" style='width: 100%;'>
 
                         <?php
-                        echo "  <option value='0'>Todas los clientes</option>";
+                        echo "  <option value='0'>".lang("notasCredito.allCustumer")."</option>";
                         ?>
 
                     </select>
@@ -103,7 +103,7 @@
 
             </div>
 
-            <div class="btn-group">
+            <div class="btn-group" hidden>
 
 
 
@@ -119,7 +119,7 @@
 
                 <a href="<?= base_url("admin/newNotaCredito") ?>" class="btn btn-primary btnAddCustumers" data-target="#modalAddCustumers"><i class="fa fa-plus"></i>
 
-                    Nueva Nota de Crédito
+                    <?= lang("notasCredito.newCreditNote") ?>
 
                 </a>
 
@@ -141,28 +141,28 @@
 
                                 <th>#</th>
                                 <th>
-                                    Folio
+                                  <?= lang("notasCredito.fields.folio")?>
                                 </th>
                                 <th>
-                                    Cliente
+                                    <?= lang("notasCredito.fields.custumer")?>
                                 </th>
                                 <th>
-                                    Fecha
-                                </th>
-
-                                <th>
-                                    Total
+                                    <?= lang("notasCredito.fields.date")?>
                                 </th>
 
                                 <th>
-                                    Creado
-                                </th>
-                                <th>
-                                    Modificado
+                                    <?= lang("notasCredito.fields.total")?>
                                 </th>
 
                                 <th>
-                                    Acciones
+                                     <?= lang("notasCredito.fields.created_at")?>
+                                </th>
+                                <th>
+                                     <?= lang("notasCredito.fields.updated_at")?>
+                                </th>
+
+                                <th>
+                                     <?= lang("notasCredito.fields.actions")?>
                                 </th>
 
                             </tr>

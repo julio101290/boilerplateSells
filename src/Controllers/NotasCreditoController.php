@@ -26,7 +26,7 @@ use julio101290\boilerplateCFDI\Models\XmlModel;
 use julio101290\boilerplatecomplementopago\Models\PagosModel;
 use julio101290\boilerplatesells\Models\EnlacexmlModel;
 use julio101290\boilerplatesells\Models\NotaCreditoDetailsModel;
-use julio101290\boilerplateCFDI\Controllers\XmlController;    
+use julio101290\boilerplateCFDI\Controllers\XmlController;
 
 class NotasCreditoController extends BaseController {
 
@@ -1352,7 +1352,7 @@ class NotasCreditoController extends BaseController {
 
         // Search Id Credit Note
 
-        $datosNotaCredito= $this->notasCredito->select("*")->where("UUID", $uuidNotaCredito)->first();
+        $datosNotaCredito = $this->notasCredito->select("*")->where("UUID", $uuidNotaCredito)->first();
 
         //Search UUID in link XML
 
@@ -1364,5 +1364,79 @@ class NotasCreditoController extends BaseController {
 
         echo $archivo;
         $this->response->setHeader("Content-Type", "application/pdf");
+    }
+
+    public function getXMLEnlazados($uuidNotaCredito) {
+
+        try {
+
+            $datosNotaCredito = $this->notasCredito->select("*")->where("UUID", $uuidNotaCredito)->first();
+
+            if (isset($datosNotaCredito)) {
+
+                $request = service('request');
+                $db = \Config\Database::connect();
+
+                $columns = ['a.id', 'a.idDocumento', 'a.uuidXML', 'a.tipo', 'a.importe', 'c.status', 'c.archivoXML', 'a.created_at', 'a.updated_at', 'a.deleted_at'];
+
+                // === FROM y JOIN ===
+                $builder = $db->table('enlacexml a');
+                $builder->join('xml c', 'c.uuidTimbre = a.uuidXML');
+
+                // === WHERE principal ===
+                $builder->where('a.idDocumento', $datosNotaCredito["id"]);
+                $builder->where('a.tipo', "NCR");
+
+                // === Total sin filtro ===
+                $total = $builder->countAllResults(false); // no reset
+                // === Búsqueda global ===
+                $searchValue = $request->getPost('search')['value'] ?? '';
+                if ($searchValue) {
+                    $builder->groupStart();
+                    foreach ($columns as $col) {
+                        $builder->orLike($col, $searchValue);
+                    }
+                    $builder->groupEnd();
+                }
+
+                // === Total filtrado ===
+                $filtered = $builder->countAllResults(false);
+
+                // === Ordenamiento ===
+                $orderColumnIndex = $request->getPost('order')[0]['column'] ?? 0;
+                $orderColumn = $columns[$orderColumnIndex] ?? 'a.id';
+                $orderDir = $request->getPost('order')[0]['dir'] ?? 'asc';
+                $builder->orderBy($orderColumn, $orderDir);
+
+                // === Paginación ===
+                $length = $request->getPost('length') ?? 10;
+                $start = $request->getPost('start') ?? 0;
+                $builder->limit($length, $start);
+
+                // === Ejecutar y devolver ===
+                $query = $builder->get();
+                $data = $query->getResultArray();
+
+                return $this->response->setJSON([
+                            'draw' => intval($request->getPost('draw')),
+                            'recordsTotal' => $total,
+                            'recordsFiltered' => $filtered,
+                            'data' => $data
+                ]);
+            } else {
+
+                $datos = $this->enlaceXML
+                        ->select('id,idDocumento,uuidXML,tipo,importe')
+                        ->where('idDocumento', 0)
+                        ->findAll();
+
+                return $this->response->setJSON([
+                            'data' => $datos
+                ]);
+            }
+        } catch (Exception $ex) {
+
+            return $ex->getMessage();
+        }
     }
 }
