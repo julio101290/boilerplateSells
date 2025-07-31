@@ -66,10 +66,10 @@ class DashboardController extends BaseController {
 
         if (count($titulos["sucursales"]) == "0") {
 
-            $sucursalessID[0] = "0";
+            $sucursalesID[0] = "0";
         } else {
 
-            $sucurssalesID = array_column($titulos["sucursales"], "id");
+            $sucursalesID = array_column($titulos["sucursales"], "id");
         }
 
 
@@ -101,7 +101,7 @@ class DashboardController extends BaseController {
                 , '1990-01-01'
                 , '2048-01-01'
                 , $empresasID
-                , $sucurssalesID);
+                , $sucursalesID);
 
         $productosDatos["nombre"] = "";
         $productosDatos["cantidad"] = "";
