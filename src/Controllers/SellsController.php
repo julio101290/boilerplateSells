@@ -251,9 +251,9 @@ class SellsController extends BaseController {
     public function sellsReport($idEmpresa = 0
             , $idSucursal = 0
             , $idProducto = 0
-            , $from =null
-            , $to=null
-            , $cliente=0) {
+            , $from = null
+            , $to = null
+            , $cliente = 0) {
 
 
         $auth = service('authentication');
@@ -298,16 +298,76 @@ class SellsController extends BaseController {
         if ($this->request->isAJAX()) {
 
 
-            $datos = $this->sells->mdlVentasPorProductos($idEmpresa
-                    , $idSucursal
-                    , $idProducto
-                    , $from
-                    , $to
-                    , $empresasID
-                    , $sucursalesID
-                    , $cliente);
+            // Parámetros DataTables
+            $draw = intval($this->request->getVar('draw'));
+            $start = intval($this->request->getVar('start'));
+            $length = intval($this->request->getVar('length'));
+            $searchValue = $this->request->getVar('search')['value'] ?? '';
+            $order = $this->request->getVar('order');
+            $columns = $this->request->getVar('columns');
+            
+            
 
-            return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+            // Parámetros personalizados para filtrar
+           
+       
+
+            // Obtener query base sin paginar
+            $queryBuilder = $this->sells->mdlVentasPorProductos(
+                    $idEmpresa, $idSucursal, $idProducto,
+                    $from, $to,
+                    $empresasID, $sucursalesID,
+                    $cliente
+            );
+
+            // Total registros sin filtros de búsqueda
+            $recordsTotal = $queryBuilder->countAllResults(false); // false para no resetear la query
+            // Aplicar búsqueda global si viene
+            if (!empty($searchValue)) {
+                $queryBuilder->groupStart();
+                foreach ($columns as $col) {
+                    if ($col['searchable'] == 'true') {
+                        // El campo a buscar (puede venir en data o name)
+                        $field = $col['data'];
+                        $queryBuilder->orLike($field, $searchValue);
+                    }
+                }
+                $queryBuilder->groupEnd();
+            }
+
+            // Total registros filtrados (con búsqueda)
+            $recordsFiltered = $queryBuilder->countAllResults(false);
+
+            // Aplicar orden
+            if (!empty($order)) {
+                foreach ($order as $ord) {
+                    $colIdx = intval($ord['column']);
+                    $dir = $ord['dir'] === 'asc' ? 'ASC' : 'DESC';
+
+                    if (isset($columns[$colIdx]) && $columns[$colIdx]['orderable'] == 'true') {
+                        $orderColumn = $columns[$colIdx]['data'];
+                        $queryBuilder->orderBy($orderColumn, $dir);
+                    }
+                }
+            }
+
+            // Aplicar paginación
+            if ($length != -1) { // -1 = sin límite
+                $queryBuilder->limit($length, $start);
+            }
+
+            // Obtener datos
+            $data = $queryBuilder->get()->getResultArray();
+
+            // Armar respuesta
+            $response = [
+                "draw" => $draw,
+                "recordsTotal" => $recordsTotal,
+                "recordsFiltered" => $recordsFiltered,
+                "data" => $data
+            ];
+
+            return $this->response->setJSON($response);
         }
     }
 
