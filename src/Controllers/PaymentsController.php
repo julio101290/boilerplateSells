@@ -71,8 +71,7 @@ class PaymentsController extends BaseController {
 
         $datos["idSell"] = $datosVenta["id"];
         $datos["idQuote"] = "0";
-        
-        
+
         try {
 
 
@@ -83,15 +82,14 @@ class PaymentsController extends BaseController {
             } else {
                 $datos["datePayment"] = null; // o manejar error manualmente
             }
-           
+
             //metodPayment
             $datos["metodPayment"] = $datos["metodoPago"];
-            
-            if(!isset($datos["idComplemento"])){
-                
+
+            if (!isset($datos["idComplemento"])) {
+
                 $datos["idComplemento"] = 0;
-                
-            } 
+            }
             if ($this->payments->save($datos) === false) {
 
                 $this->payments->db->transRollback();
@@ -111,10 +109,10 @@ class PaymentsController extends BaseController {
 
             try {
 
-                $datosVenta["balance"] = $datosVenta["balance"] - ($datos["importPayment"] - $datos["importBack"]);
+                $newBalance["balance"] = $datosVenta["balance"] - ($datos["importPayment"] - $datos["importBack"]);
 
-                echo $datosVenta["balance"];
-                $this->sells->update($datosVenta["id"], $datosVenta);
+               
+                $this->sells->update($datosVenta["id"],  $newBalance);
 
                 $this->payments->transCommit();
             } catch (Exception $e) {
@@ -152,23 +150,105 @@ class PaymentsController extends BaseController {
             $sell["id"] = 0;
         }
 
-        $datos = $this->payments
-                ->select('id'
-                        . ',idSell'
-                        . ',importPayment'
-                        . ',importBack'
-                        . ',datePayment'
-                        . ',metodPayment'
-                        . ',observaciones'
-                        . ',tipo'
-                        . ',idNotaCredito'
-                        . ',created_at'
-                        . ',updated_at'
-                        . ',deleted_at')
-                ->where('deleted_at', null)
-                ->where('idSell', $sell["id"]);
+        $request = service('request');
 
-        return \Hermawan\DataTables\DataTable::of($datos)->toJson(true);
+        $draw = (int) $request->getVar('draw');
+        $start = (int) $request->getVar('start');
+        $length = (int) $request->getVar('length');
+        $search = $request->getVar('search')['value'] ?? '';
+        $order = $request->getVar('order');
+        $columnsReq = $request->getVar('columns');
+
+        // Solo columnas válidas (string y que existan en BD)
+        $validColumns = [
+            'id',
+            'datePayment',
+            'importPayment',
+            'importBack',
+            'observaciones',
+            'tipo'
+        ];
+
+        $columns = [];
+        if ($columnsReq) {
+            foreach ($columnsReq as $col) {
+                if (
+                        !empty($col['data']) &&
+                        is_string($col['data']) &&
+                        in_array($col['data'], $validColumns)
+                ) {
+                    $columns[] = $col['data'];
+                }
+            }
+        }
+
+        // Si no mandan columnas válidas, usar todas por defecto
+        if (empty($columns)) {
+            $columns = $validColumns;
+        }
+
+        // Query base
+        $builder = $this->payments
+                ->select(implode(',', $columns))
+                ->where('deleted_at', null)
+                ->where('idSell', $sell['id']);
+
+        // Total sin filtros
+        $recordsTotal = $builder->countAllResults(false);
+
+        // Búsqueda global
+        if (!empty($search)) {
+            $builder->groupStart();
+            foreach ($columnsReq as $col) {
+                if (
+                        $col['searchable'] === 'true' &&
+                        !empty($col['data']) &&
+                        is_string($col['data']) &&
+                        in_array($col['data'], $validColumns)
+                ) {
+                    $builder->orLike($col['data'], $search);
+                }
+            }
+            $builder->groupEnd();
+        }
+
+        // Total filtrados
+        $recordsFiltered = $builder->countAllResults(false);
+
+        // Ordenamiento
+        if ($order) {
+            foreach ($order as $o) {
+                $colIdx = intval($o['column']);
+                $dir = $o['dir'] === 'asc' ? 'ASC' : 'DESC';
+
+                if (
+                        isset($columnsReq[$colIdx]) &&
+                        $columnsReq[$colIdx]['orderable'] === 'true' &&
+                        !empty($columnsReq[$colIdx]['data']) &&
+                        is_string($columnsReq[$colIdx]['data']) &&
+                        in_array($columnsReq[$colIdx]['data'], $validColumns)
+                ) {
+                    $builder->orderBy($columnsReq[$colIdx]['data'], $dir);
+                }
+            }
+        }
+
+        // Paginación
+        if ($length != -1) {
+            $builder->limit($length, $start);
+        }
+
+        // Ejecutar query
+        $query = $builder->get();
+        $data = $query->getResultArray();
+
+        // Respuesta JSON
+        return $this->response->setJSON([
+                    'draw' => $draw,
+                    'recordsTotal' => $recordsTotal,
+                    'recordsFiltered' => $recordsFiltered,
+                    'data' => $data
+        ]);
     }
 
     /**
