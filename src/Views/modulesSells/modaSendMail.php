@@ -78,59 +78,39 @@
 
 
     $(document).on('click', '.btnSendMailConfirm', function (e) {
-
         console.log("Enviar correo");
 
         $(".btnSendMailConfirm").attr("disabled", true);
 
         var uuid = $("#uuidMail").val();
-
         var correos = $("#correos").val();
 
         $.ajax({
-
-            url: "<?= base_url('admin/mailSettings/sendMailVenta/') ?>" + uuid + '/' + correos,
-            method: "GET",
-
-            cache: false,
-            contentType: false,
-            processData: false,
-            //dataType:"json",
+            url: "<?= base_url('admin/mailSettings/sendMailVenta') ?>",
+            method: "POST",
+            data: {
+                uuid: uuid,
+                correos: correos
+            },
             success: function (respuesta) {
-
-
                 if (respuesta.match(/Correctamente.*/)) {
-
-
                     Toast.fire({
                         icon: 'success',
                         title: "Enviado Correctamente"
                     });
 
-
-
                     $(".btnSendMailConfirm").removeAttr("disabled");
-
-
                     $('#modalSendMail').modal('hide');
                 } else {
-
                     Toast.fire({
                         icon: 'error',
                         title: respuesta
                     });
 
                     $(".btnSendMailConfirm").removeAttr("disabled");
-
                 }
-
             }
-
-        }
-
-        )
-
-
+        });
     });
 
 

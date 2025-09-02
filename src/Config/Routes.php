@@ -120,9 +120,8 @@ $routes->group('admin', function ($routes) {
     $routes->get('graficas/(:any)/(:any)'
             , 'DashboardController::traerInfo/$1/$2'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
-    
-    
+    );
+
     /**
      * Rutas para las notas de crédito
      */
@@ -136,48 +135,72 @@ $routes->group('admin', function ($routes) {
     $routes->get('notasCredito/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'
             , 'NotasCreditoController::notasCreditoFilters/$1/$2/$3/$4/$5/$6'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
-    
+    );
+
     $routes->get('editNotaCredito/(:any)'
             , 'NotasCreditoController::editNotaCredito/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
+    );
     $routes->get('pagos/delete/(:any)'
             , 'NotasCreditoController::delete/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
-    
+    );
+
     $routes->get('timbrarNotaCredito/(:any)'
             , 'FacturaElectronicaController::timbrarNotaCredito/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
+    );
 
     $routes->get('xml/generarPDFDesdeNotaCredito/(:any)'
             , 'XmlController::generaPDFDesdeNotaCredito/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
+    );
 
     $routes->get('newNotaCredito'
             , 'NotasCreditoController::newNotaCredito'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
+    );
 
     $routes->post('notasCredito/save'
             , 'NotasCreditoController::save'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
+    );
 
     $routes->get('xml/generarPDFNotaCredito/(:any)'
             , 'NotasCreditoController::generaPDFDesdeNotaCredito/$1'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
-            );
-    
+    );
+
     $routes->get('xml/generarPDFDesdeRemNotaCredito/(:any)'
             , 'XmlController::generaPDFNotaCredito/$1'
             , ['namespace' => 'julio101290\FacturaElectronicaController\Controllers']
-            );
+    );
     $routes->get('xmlenlace/getXMLEnlazadosNotaCredito/(:any)'
             , 'NotasCreditoController::getXMLEnlazados/$1'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+    );
+
+    /** Rutas para el correo electronico */
+    $routes->resource('emailSettings', [
+        'filter' => 'permission:email-permiso',
+        'controller' => 'SettingsMailController',
+        ['namespace' => 'julio101290\boilerplatesells\Controllers'],
+    ]);
+
+    $routes->post('mailSettings/save'
+            , 'SettingsMailController::guardar'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+    );
+
+    //Para futuros envios
+    $routes->get('mailSettings/sendMailCotizacion/(:any)/(:any)'
+            , 'SettingsMailController::sendMailCotizacionesPDF/$1/$2'
+            , ['namespace' => 'julio101290\boilerplatesells\Controllers']
+            );
+
+    // Envio de facturas
+    $routes->post('mailSettings/sendMailVenta'
+            , 'SettingsMailController::sendMailVentasPDF'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
             );
 });
