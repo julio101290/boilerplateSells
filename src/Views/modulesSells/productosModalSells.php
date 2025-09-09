@@ -20,6 +20,7 @@
                                         <th>Lote</th>
                                         <th>Almacen</th>
                                         <th>Stock</th>
+                                        <th>imagen</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -61,9 +62,9 @@
         },
         columnDefs: [{
                 orderable: false,
-                targets: [5],
+                targets: [5, 6],
                 searchable: false,
-                targets: [5]
+                targets: [5, 6]
 
             }],
         columns: [{
@@ -83,6 +84,20 @@
 
             {
                 'data': 'stock'
+            },
+            {
+                "data": function (data) {
+
+                    if (data.routeImage == "") {
+                        data.routeImage = "anonymous.png";
+                    }
+
+                    return `<td class="text-right py-0 align-middle">
+                         <div class="btn-group btn-group-sm">
+                         <img src="<?= base_URL("images/products") ?>/${data.routeImage}" data-action="zoom" width="40px" class="" style="">
+                         </div>
+                         </td>`
+                }
             },
 
             {
@@ -246,7 +261,7 @@
         $("#predialRenglon").val(predial);
 
         $("#tasaExcentaRenglon").bootstrapToggle(tasaExcenta);
-        
+
 
 
 
