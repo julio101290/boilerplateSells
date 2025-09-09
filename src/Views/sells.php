@@ -109,7 +109,7 @@
 
 
 
-                <input type="checkbox" id="chkTodasLasVentas" name="chkTodasLasVentas" class="chkTodasLasVentas" data-width="250" data-height="40" checked data-toggle="toggle" data-on="<?= lang('sells.allSells') ?>" data-off="<?= lang('sells.allSells') ?>" data-onstyle="success" data-offstyle="danger">
+                <input type="checkbox" id="chkTodasLasVentas" name="chkTodasLasVentas" class="chkTodasLasVentas" data-width="250" data-height="40" checked data-toggle="toggle" data-on="<?= lang('sells.allSells') ?>" data-off="<?= lang('sells.pendingPayment') ?>" data-onstyle="success" data-offstyle="danger">
 
             </div>
 

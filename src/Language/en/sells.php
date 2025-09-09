@@ -1,24 +1,24 @@
 <?php
 
-$sells["logDescription"] = "The sale record was saved with the following data:";
-$sells["logUpdate"] = "The sale record was updated with the following data:";
-$sells["logDeleted"] = "The sale record was deleted with the following data:";
-$sells["msg_delete"] = "The sale record was deleted successfully:";
+$sells["logDescription"] = "The sales record was saved with the following data:";
+$sells["logUpdate"] = "The sales record was updated with the following data:";
+$sells["logDeleted"] = "The sales record was deleted with the following data:";
+$sells["msg_delete"] = "The sales record was successfully deleted:";
 $sells["add"] = "New sale";
 $sells["edit"] = "Edit sale";
 $sells["createEdit"] = "Create / Edit";
-$sells["title"] = "Sales Management";
+$sells["title"] = "Sales Admin";
 $sells["subtitle"] = "Sales List";
 
 $sells["companie"] = "Company";
 $sells["allCompanies"] = "All companies";
 $sells["branchoffice"] = "Branch office";
-$sells["AllBranchoffice"] = "All Branch offices";
+$sells["AllBranchoffice"] = "All branch offices";
 $sells["custumer"] = "Customer";
-$sells["allCustumer"] = "All Customers";
+$sells["allCustumer"] = "All customers";
 
 $sells["allSells"] = "All sales";
-$sells["pendingPayment"] = "Taxpayer ID"; // Assuming "RFC Emisor" refers to the Taxpayer ID
+$sells["pendingPayment"] = "Pending payment";
 
 $sells["fields"]["row"] = "#";
 $sells["fields"]["folio"] = "Folio";
@@ -42,11 +42,10 @@ $sells["fields"]["rows"] = "rows";
 $sells["all"] = "All";
 
 $sells["fields"]["actions"] = "Actions";
-$sells["msg"]["msg_insert"] = "Sale added successfully.";
-$sells["msg"]["msg_update"] = "Sale updated successfully.";
-$sells["msg"]["msg_delete"] = "Sale deleted successfully.";
-$sells["msg"]["msg_get"] = "Sale obtained successfully.";
+$sells["msg"]["msg_insert"] = "Sale successfully added.";
+$sells["msg"]["msg_update"] = "Sale successfully modified.";
+$sells["msg"]["msg_delete"] = "Sale successfully deleted.";
+$sells["msg"]["msg_get"] = "Sale successfully retrieved.";
 $sells["msg"]["msg_get_fail"] = "Sale not found or deleted.";
-
 
 return $sells;

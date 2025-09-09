@@ -1,8 +1,8 @@
 <?php
 
-$sells["logDescription"] = "Der Verkaufsdatensatz wurde mit folgenden Daten gespeichert:";
-$sells["logUpdate"] = "Der Verkaufsdatensatz wurde mit folgenden Daten aktualisiert:";
-$sells["logDeleted"] = "Der Verkaufsdatensatz wurde mit folgenden Daten gelöscht:";
+$sells["logDescription"] = "Der Verkaufsdatensatz wurde mit den folgenden Daten gespeichert:";
+$sells["logUpdate"] = "Der Verkaufsdatensatz wurde mit den folgenden Daten aktualisiert:";
+$sells["logDeleted"] = "Der Verkaufsdatensatz wurde mit den folgenden Daten gelöscht:";
 $sells["msg_delete"] = "Der Verkaufsdatensatz wurde erfolgreich gelöscht:";
 $sells["add"] = "Neuer Verkauf";
 $sells["edit"] = "Verkauf bearbeiten";
@@ -12,13 +12,13 @@ $sells["subtitle"] = "Verkaufsliste";
 
 $sells["companie"] = "Unternehmen";
 $sells["allCompanies"] = "Alle Unternehmen";
-$sells["branchoffice"] = "Niederlassung";
-$sells["AllBranchoffice"] = "Alle Niederlassungen";
+$sells["branchoffice"] = "Zweigstelle";
+$sells["AllBranchoffice"] = "Alle Zweigstellen";
 $sells["custumer"] = "Kunde";
 $sells["allCustumer"] = "Alle Kunden";
 
 $sells["allSells"] = "Alle Verkäufe";
-$sells["pendingPayment"] = "Steuernummer"; // Asumiendo que "RFC Emisor" se refiere a la Steuernummer
+$sells["pendingPayment"] = "Zahlung ausstehend";
 
 $sells["fields"]["row"] = "#";
 $sells["fields"]["folio"] = "Folio";
@@ -29,7 +29,7 @@ $sells["fields"]["expirationDate"] = "Verfallsdatum";
 $sells["fields"]["subTotal"] = "Zwischensumme";
 $sells["fields"]["tax"] = "Steuer";
 $sells["fields"]["total"] = "Gesamt";
-$sells["fields"]["pending"] = "Offen";
+$sells["fields"]["pending"] = "Ausstehend";
 
 $sells["fields"]["timeDelevery"] = "Lieferzeit";
 
@@ -43,7 +43,7 @@ $sells["all"] = "Alle";
 
 $sells["fields"]["actions"] = "Aktionen";
 $sells["msg"]["msg_insert"] = "Verkauf erfolgreich hinzugefügt.";
-$sells["msg"]["msg_update"] = "Verkauf erfolgreich aktualisiert.";
+$sells["msg"]["msg_update"] = "Verkauf erfolgreich geändert.";
 $sells["msg"]["msg_delete"] = "Verkauf erfolgreich gelöscht.";
 $sells["msg"]["msg_get"] = "Verkauf erfolgreich abgerufen.";
 $sells["msg"]["msg_get_fail"] = "Verkauf nicht gefunden oder gelöscht.";

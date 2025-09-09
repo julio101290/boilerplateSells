@@ -1,51 +1,51 @@
 <?php
 
-$sells["logDescription"] = "El registro en ventas fue guardado con los siguientes datos:";
-$sells["logUpdate"] = "El registro en ventas fue actualizado con los siguientes datos:";
-$sells["logDeleted"] = "El registro en ventas fue eliminado con los siguientes datos:";
-$sells["msg_delete"] = "El Registro en ventas fue eliminado correctamente:";
-$sells["add"] = "Nueva venta";
-$sells["edit"] = "Editar venta";
-$sells["createEdit"] = "Crear / Editar";
-$sells["title"] = "Admon. Ventas";
-$sells["subtitle"] = "Lista de Ventas";
+$sells["logDescription"] = "La vendoregistro estis konservita kun la jenaj datumoj:";
+$sells["logUpdate"] = "La vendoregistro estis ĝisdatigita kun la jenaj datumoj:";
+$sells["logDeleted"] = "La vendoregistro estis forigita kun la jenaj datumoj:";
+$sells["msg_delete"] = "La vendoregistro estis sukcese forigita:";
+$sells["add"] = "Nova vendo";
+$sells["edit"] = "Redakti vendon";
+$sells["createEdit"] = "Krei / Redakti";
+$sells["title"] = "Administrado de vendoj";
+$sells["subtitle"] = "Listo de vendoj";
 
-$sells["companie"] = "Empresa";
-$sells["allCompanies"] = "Todas las empresas";
-$sells["branchoffice"] = "Sucursal";
-$sells["AllBranchoffice"] = "Todas las Sucursales ";
-$sells["custumer"] = "Cliente ";
-$sells["allCustumer"] = "Todos los Clientes ";
+$sells["companie"] = "Firmao";
+$sells["allCompanies"] = "Ĉiuj firmaoj";
+$sells["branchoffice"] = "Filio";
+$sells["AllBranchoffice"] = "Ĉiuj filioj";
+$sells["custumer"] = "Kliento";
+$sells["allCustumer"] = "Ĉiuj klientoj";
 
-$sells["allSells"] = "Todas las ventas";
-$sells["pendingPayment"] = "RFC Emisor";
+$sells["allSells"] = "Ĉiuj vendoj";
+$sells["pendingPayment"] = "Atendante pagon";
 
 $sells["fields"]["row"] = "#";
 $sells["fields"]["folio"] = "Folio";
-$sells["fields"]["custumer"] = "Cliente";
-$sells["fields"]["date"] = "Fecha";
-$sells["fields"]["expirationDate"] = "Fecha Vencimiento";
+$sells["fields"]["custumer"] = "Kliento";
+$sells["fields"]["date"] = "Dato";
+$sells["fields"]["expirationDate"] = "Dato de limtago";
 
-$sells["fields"]["subTotal"] = "Sub Total";
-$sells["fields"]["tax"] = "Impuesto";
-$sells["fields"]["total"] = "Total";
-$sells["fields"]["pending"] = " Pendiente";
+$sells["fields"]["subTotal"] = "Subtotalo";
+$sells["fields"]["tax"] = "Imposto";
+$sells["fields"]["total"] = "Totalo";
+$sells["fields"]["pending"] = "Atendata";
 
-$sells["fields"]["timeDelevery"] = "Tiempo Entrega";
+$sells["fields"]["timeDelevery"] = "Livertempo";
 
-$sells["fields"]["created_at"] = "Creado";
-$sells["fields"]["deleted_at"] = "Eliminado";
-$sells["fields"]["updated_at"] = "Actualizado";
+$sells["fields"]["created_at"] = "Kreita";
+$sells["fields"]["deleted_at"] = "Forigita";
+$sells["fields"]["updated_at"] = "Ĝisdatigita";
 
-$sells["fields"]["rows"] = "renglones";
+$sells["fields"]["rows"] = "linioj";
 
-$sells["all"] = "Todo";
+$sells["all"] = "Ĉio";
 
-$sells["fields"]["actions"] = "Acciones";
-$sells["msg"]["msg_insert"] = "Venta agregada correctamente.";
-$sells["msg"]["msg_update"] = "Venta modificada correctamente.";
-$sells["msg"]["msg_delete"] = "Venta eliminada correctamente.";
-$sells["msg"]["msg_get"] = "Venta obtenido correctamente.";
-$sells["msg"]["msg_get_fail"] = "Venta no encontrada o eliminada.";
+$sells["fields"]["actions"] = "Agoj";
+$sells["msg"]["msg_insert"] = "Vendo sukcese aldonita.";
+$sells["msg"]["msg_update"] = "Vendo sukcese modifita.";
+$sells["msg"]["msg_delete"] = "Vendo sukcese forigita.";
+$sells["msg"]["msg_get"] = "Vendo sukcese akirita.";
+$sells["msg"]["msg_get_fail"] = "Vendo ne trovita aŭ forigita.";
 
 return $sells;

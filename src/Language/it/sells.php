@@ -7,18 +7,18 @@ $sells["msg_delete"] = "Il record di vendita è stato eliminato correttamente:";
 $sells["add"] = "Nuova vendita";
 $sells["edit"] = "Modifica vendita";
 $sells["createEdit"] = "Crea / Modifica";
-$sells["title"] = "Gestione vendite";
+$sells["title"] = "Amministraz. vendite";
 $sells["subtitle"] = "Elenco vendite";
 
 $sells["companie"] = "Azienda";
 $sells["allCompanies"] = "Tutte le aziende";
 $sells["branchoffice"] = "Filiale";
-$sells["AllBranchoffice"] = "Tutte le Filiali";
+$sells["AllBranchoffice"] = "Tutte le filiali";
 $sells["custumer"] = "Cliente";
-$sells["allCustumer"] = "Tutti i Clienti";
+$sells["allCustumer"] = "Tutti i clienti";
 
 $sells["allSells"] = "Tutte le vendite";
-$sells["pendingPayment"] = "Codice Fiscale"; // Assumendo che "RFC Emisor" si riferisca al Codice Fiscale
+$sells["pendingPayment"] = "In attesa di pagamento";
 
 $sells["fields"]["row"] = "#";
 $sells["fields"]["folio"] = "Folio";
@@ -29,7 +29,7 @@ $sells["fields"]["expirationDate"] = "Data di scadenza";
 $sells["fields"]["subTotal"] = "Subtotale";
 $sells["fields"]["tax"] = "Imposta";
 $sells["fields"]["total"] = "Totale";
-$sells["fields"]["pending"] = "Pendente";
+$sells["fields"]["pending"] = "In attesa";
 
 $sells["fields"]["timeDelevery"] = "Tempo di consegna";
 
