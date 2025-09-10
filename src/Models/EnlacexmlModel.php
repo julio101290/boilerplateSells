@@ -92,7 +92,7 @@ class EnlacexmlModel extends Model {
      * @param type $idEmpresas
      * @return type
      */
-    public function mdlGetEnlacexmlDatos($idVenta) {
+    public function mdlGetEnlacexmlDatos($idVenta,$tipo ="ven") {
 
         $result = $this->db->table('enlacexml a, xml c')
                 ->select('a.id
@@ -106,6 +106,7 @@ class EnlacexmlModel extends Model {
                          ,a.updated_at
                          ,a.deleted_at')
                 ->where('a.idDocumento', $idVenta)
+                ->where('a.tipo', $tipo)
                 ->where('c.uuidTimbre', 'a.uuidXML', FALSE);
 
         return $result;
