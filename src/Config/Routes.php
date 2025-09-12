@@ -193,8 +193,8 @@ $routes->group('admin', function ($routes) {
     );
 
     //Para futuros envios
-    $routes->get('mailSettings/sendMailCotizacion/(:any)/(:any)'
-            , 'SettingsMailController::sendMailCotizacionesPDF/$1/$2'
+    $routes->post('mailSettings/sendMailCotizacionesPDF'
+            , 'SettingsMailController::sendMailCotizacionesPDF'
             , ['namespace' => 'julio101290\boilerplatesells\Controllers']
             );
 

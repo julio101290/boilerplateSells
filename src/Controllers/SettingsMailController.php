@@ -41,7 +41,6 @@ class SettingsMailController extends BaseController {
     protected $enlaceXML;
     protected $xml;
     protected $pagos;
-    
 
     public function __construct() {
         $this->group = new GroupModel();
@@ -86,12 +85,13 @@ class SettingsMailController extends BaseController {
         // return redirect()->back()->with('sweet-success','Guardado Correctamente');
     }
 
-    public function sendMailCotizacionesPDF($uuid, $correos) {
+    public function sendMailCotizacionesPDF() {
+
+        $uuid = $this->request->getPost('uuid');
+        $correos = $this->request->getPost('correos');
 
 
-        $arregloCorreos = explode(",", $correos);
 
-        //DATOS  REGISTRO
         $cotizaciones = $this->quotes->select("*")->where("uuid", $uuid)->first();
 
         $datos = $this->empresa->find($cotizaciones["idEmpresa"]);
@@ -116,6 +116,8 @@ class SettingsMailController extends BaseController {
 // Load Composer's autoloader
 // Instantiation and passing `true` enables exceptions
         $mail = new PHPMailer\PHPMailer();
+        
+        $attachment = $this->quotesController->report($uuid, 1);
 
         try {
 
@@ -135,7 +137,7 @@ class SettingsMailController extends BaseController {
             //Recipients
             $mail->setFrom($correo, $nombreEmpresa);
 
-            foreach ($arregloCorreos as $key => $value) {
+            foreach ($correos as $key => $value) {
                 try {
 
                     $mailAddress = $mail->addAddress($value, '');
@@ -298,10 +300,8 @@ class SettingsMailController extends BaseController {
             return $this->response->setBody("Error al enviar el correo: {$mail->ErrorInfo}");
         }
     }
-    
-    
-    
-     public function sendMailPagosPDF() {
+
+    public function sendMailPagosPDF() {
         // Recibir desde POST
         $uuid = $this->request->getPost('uuid');
         $correos = $this->request->getPost('correos');
@@ -413,11 +413,8 @@ class SettingsMailController extends BaseController {
             return $this->response->setBody("Error al enviar el correo: {$mail->ErrorInfo}");
         }
     }
-    
-    
-    
-    
-     public function sendMailComplementoPDF() {
+
+    public function sendMailComplementoPDF() {
         // Recibir desde POST
         $uuid = $this->request->getPost('uuid');
         $correos = $this->request->getPost('correos');
@@ -489,7 +486,7 @@ class SettingsMailController extends BaseController {
             }
 
             // --- (Aquí sigue tu lógica para adjuntar archivos y generar PDFs) ---
-            $enlaceFacturas = $this->enlaceXML->mdlGetEnlacexmlDatos($pagos["id"],"pag");
+            $enlaceFacturas = $this->enlaceXML->mdlGetEnlacexmlDatos($pagos["id"], "pag");
 
             $enlaceFacturas = $enlaceFacturas->get()->getResultArray();
 
@@ -529,6 +526,4 @@ class SettingsMailController extends BaseController {
             return $this->response->setBody("Error al enviar el correo: {$mail->ErrorInfo}");
         }
     }
-    
-    
 }
