@@ -513,6 +513,7 @@ class SellsController extends BaseController {
 
                 // === WHERE principal ===
                 $builder->where('a.idDocumento', $datosVenta["id"]);
+                $builder->where('a.idDocumento', "ven");
 
                 // === Total sin filtro ===
                 $total = $builder->countAllResults(false); // no reset
