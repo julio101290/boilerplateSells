@@ -521,7 +521,7 @@ class SellsController extends BaseController {
                     }
                     $builder->groupEnd();
                 }
-    //log_message('debug', $builder->getCompiledSelect());
+                //log_message('debug', $builder->getCompiledSelect());
                 // === Total filtrado ===
                 $filtered = $builder->countAllResults(false);
 
@@ -539,8 +539,6 @@ class SellsController extends BaseController {
                 // === Ejecutar y devolver ===
                 $query = $builder->get();
                 $data = $query->getResultArray();
-                
-            
 
                 return $this->response->setJSON([
                             'draw' => intval($request->getPost('draw')),
@@ -651,26 +649,6 @@ class SellsController extends BaseController {
         $permisoAgregarArticulo = $authorize->hasPermission('capturaarticulodesdeventa', $idUser);
 
         $sell = $this->sells->mdlGetSellUUID($uuid, $empresasID);
-
-      
-
-        /**
-         * Verificamos que no tenga enlazado XML
-         */
-        if ($this->xmlEnlace->select("*")->where("idDocumento", $sell["id"])->countAllResults() > 0) {
-
-            $this->sells->db->transRollback();
-            return $this->failNotFound('La Venta no se puede eliminar por que ya tiene timbre enlazado');
-        }
-
-        /**
-         * Verificamos que no tenga Pagos Enlazados
-         */
-        if ($this->payments->select("*")->where("idSell", $sell["id"])->countAllResults() > 0) {
-
-            $this->sells->db->transRollback();
-            return $this->failNotFound('La Venta no se puede eliminar por que ya tiene pagos ');
-        }
 
         $listProducts = json_decode($sell["listProducts"], true);
 
@@ -1125,6 +1103,27 @@ class SellsController extends BaseController {
 
 
             $backSell = $this->sells->where("UUID", $datos["UUID"])->first();
+
+            /**
+             * Verificamos que no tenga enlazado XML
+             */
+            if ($this->xmlEnlace->select("*")->where("idDocumento", $backSell["id"])->countAllResults() > 0) {
+
+                $this->sells->db->transRollback();
+                return $this->failNotFound('La Venta no se puede eliminar por que ya tiene timbre enlazado');
+            }
+
+            /**
+             * Verificamos que no tenga Pagos Enlazados
+             */
+            if ($this->payments->select("*")->where("idSell", $backSell["id"])->countAllResults() > 0) {
+
+                $this->sells->db->transRollback();
+                return $this->failNotFound('La Venta no se puede eliminar por que ya tiene pagos ');
+            }
+
+
+
             $listProductsBack = json_decode($backSell["listProducts"], true);
 
             //BUSCAMOS SI TIENE PAGOS
